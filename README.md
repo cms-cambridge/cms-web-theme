@@ -42,6 +42,14 @@ masthead+hero pattern and `examples/bootstrap-example.html` /
 
 ## Quickstart
 
+If you just want to have a look at some examples using this theme, then use `quickstart.sh` like so:
+
+```bash
+# run from repo root
+chmod +x quickstart.sh
+./quickstart.sh
+```
+
 Pick one framework track. Don't load both `dist/cambridge-theme.css` and
 `css/cambridge-tokens.css` on the same page — the class names don't
 collide, but you don't need two copies of the same tokens.
