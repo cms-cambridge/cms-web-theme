@@ -1,21 +1,17 @@
-// Additive component styles layered on top of stock Bootstrap. Bootstrap's
-// own classes (.btn, .navbar, .card, .alert, .badge, .table, .form-control…)
-// already carry the palette via the variable overrides in _tokens.scss —
-// this file only adds the handful of things Bootstrap has no variable for.
+// Additive styles on top of stock Bootstrap. Its own classes (.btn,
+// .navbar, .card, .alert, .badge, .table, .form-control…) already carry
+// the palette via _tokens.scss — this file covers what Bootstrap has no
+// variable for.
 
-// --- Wordmark --------------------------------------------------------
-// An italic serif word, for your own product/site name only — not a
-// general emphasis utility.
+// Italic serif wordmark — for your own product/site name, not general
+// emphasis.
 .cam-brand {
   font-family: $cam-font-serif;
   font-style: italic;
   font-weight: inherit;
 }
 
-// --- Navbar accent rule ------------------------------------------------
-// Cambridge departmental sites separate the header from the page with one
-// accent-coloured rule rather than a shadow or a second band. Add this
-// class alongside Bootstrap's .navbar.
+// The header accent rule + underline nav. Add alongside Bootstrap's .navbar.
 .navbar-cambridge {
   border-bottom: 3px solid $cam-teal;
 
@@ -35,11 +31,9 @@
   }
 }
 
-// --- Quiet notice --------------------------------------------------------
-// Bootstrap's .alert-* variants are saturated fills, right for a dismissible
-// warning. For a session/status line that should sit quietly on the page
-// (auth state, an inline aside), use this instead: neutral fill, one
-// coloured edge.
+// A quiet status line — neutral fill, one coloured edge — where Bootstrap's
+// .alert-* saturated fills read as too loud (a session/auth aside, not a
+// dismissible warning).
 .alert-cambridge {
   background: $cam-fill;
   border: 0;
@@ -48,11 +42,8 @@
   color: $cam-ink;
 }
 
-// --- Masthead + hero — the alternate header ------------------------------
-// For a content or marketing page rather than an app: an identity band,
-// then a title band underneath. Bootstrap's own .navbar (+ .navbar-cambridge
-// above) stays the header for an app or tool. See css/cambridge-tokens.css
-// for the fuller comment on when each earns its place.
+// The content-page header: an identity band, then a title band. .navbar
+// (+ .navbar-cambridge above) stays the header for an app or tool.
 
 .cam-masthead {
   background: $cam-surface;
@@ -96,8 +87,7 @@
   }
 }
 
-// The deep variant: Pantone 547 as a full-bleed field. Reach for this on
-// a page's own homepage, once — every page doing it reads as decoration.
+// Deep variant: Pantone 547 full-bleed. Once per site, on the homepage.
 .cam-hero-deep {
   background: $cam-ink;
   color: #fff;
@@ -107,9 +97,7 @@
   a { color: #fff; }
 }
 
-// --- Prose ----------------------------------------------------------------
-// Long-form content — an about page, a blog post, documentation body text.
-// Apply to a wrapping element; it styles its own children.
+// Long-form content. Apply to a wrapping element; it styles its own children.
 
 .cam-prose {
   max-width: 40rem;
@@ -143,13 +131,10 @@
   img, video { border-radius: $cam-radius-md; }
 }
 
-// --- Categorical badges --------------------------------------------------
-// Bootstrap's .badge.bg-primary etc. already work (primary = ink). These
-// add the categorical palette for anything that needs colour to carry
-// meaning rather than accent it — HTTP codes and job states if you're
-// building a tool, but equally a tag, a category, a subject area on a
-// content page. Each is a darkened, AA-safe shade of the named primary
-// colour; see README.md's contrast table before adding another.
+// Bootstrap's .badge.bg-primary etc. already work (primary = ink). These add
+// the categorical palette for data that needs colour to carry meaning — a
+// status, a tag. Each is a WCAG-AA-safe shade; see README.md before adding
+// another.
 .badge-cam-info    { background-color: #005a9e !important; } // Science Blue, darkened
 .badge-cam-success { background-color: #3e7a14 !important; } // Vida Loca, darkened
 .badge-cam-warning { background-color: #b4521a !important; } // Tango, darkened

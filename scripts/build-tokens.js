@@ -30,10 +30,9 @@ const scssLines = [
   "",
 ];
 for (const [key, val] of entries) {
-  scssLines.push(`// ${val.comment}`);
   scssLines.push(`$cam-${kebab(key)}: ${val.value};`);
-  scssLines.push("");
 }
+scssLines.push("");
 scssLines.push("// Map onto the Bootstrap variables that drive its component styles.");
 scssLines.push("$body-color:              $cam-ink;");
 scssLines.push("$body-bg:                 $cam-bg;");
@@ -67,7 +66,6 @@ fs.writeFileSync(
 // --- css/cambridge-tokens.css (token block only) ------------------------
 const cssLines = ["  /* --- GENERATED TOKENS: start (see tokens/tokens.json) --- */"];
 for (const [key, val] of entries) {
-  cssLines.push(`  /* ${val.comment} */`);
   cssLines.push(`  --cam-${kebab(key)}: ${val.value};`);
 }
 cssLines.push("  /* --- GENERATED TOKENS: end --- */");
@@ -75,8 +73,10 @@ const generatedBlock = cssLines.join("\n");
 
 const cssPath = path.join(ROOT, "css/cambridge-tokens.css");
 const existing = fs.existsSync(cssPath) ? fs.readFileSync(cssPath, "utf8") : null;
+// Includes any leading whitespace on the marker's own line, so a
+// re-run can't compound indentation each time it replaces the block.
 const markerRe =
-  /\/\* --- GENERATED TOKENS: start \(see tokens\/tokens\.json\) --- \*\/[\s\S]*?\/\* --- GENERATED TOKENS: end --- \*\//;
+  /[ \t]*\/\* --- GENERATED TOKENS: start \(see tokens\/tokens\.json\) --- \*\/[\s\S]*?\/\* --- GENERATED TOKENS: end --- \*\//;
 
 if (existing && markerRe.test(existing)) {
   fs.writeFileSync(cssPath, existing.replace(markerRe, generatedBlock));
