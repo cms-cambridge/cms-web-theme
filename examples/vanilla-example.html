@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vanilla example — Cambridge web theme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&display=swap" rel="stylesheet">
+  <!-- No Bootstrap, no build step: this file alone is the whole theme. -->
+  <link rel="stylesheet" href="../css/cambridge-tokens.css">
+</head>
+<body>
+  <header class="cam-header">
+    <div class="cam-header-inner">
+      <a class="cam-brand-link" href="#">your-service</a>
+      <a class="cam-nav-link is-current" href="#">Home</a>
+      <a class="cam-nav-link" href="#">Jobs</a>
+      <a class="cam-nav-link" href="#">Docs</a>
+      <span class="cam-nav-gap"></span>
+      <a class="cam-nav-link" href="#">Sign in</a>
+    </div>
+  </header>
+
+  <main class="cam-container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+    <h1><em class="cam-brand">your-service</em></h1>
+    <p class="cam-muted" style="max-width: 34em;">
+      A one-line description of what this tool does, in the same voice as
+      the upload page it's modelled on.
+    </p>
+
+    <p class="cam-notice" role="status" style="margin: 1.2rem 0;">
+      Signed in as jbloggs. Demo limits apply.
+    </p>
+
+    <div class="cam-card" style="margin: 1.5rem 0;">
+      <h2>Choose files</h2>
+      <p class="cam-muted">Accepts .csv up to 10MB.</p>
+      <input class="cam-input" type="file" style="margin: 0.75rem 0;">
+      <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+        <button class="cam-btn" type="submit">Submit</button>
+        <button class="cam-btn cam-btn-outline" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <h2>Status</h2>
+    <table class="cam-table">
+      <thead>
+        <tr><th>Code</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="cam-badge cam-badge-success">200</span></td><td>OK</td></tr>
+        <tr><td><span class="cam-badge cam-badge-info">302</span></td><td>Redirect</td></tr>
+        <tr><td><span class="cam-badge cam-badge-warn">400</span></td><td>Client error</td></tr>
+        <tr><td><span class="cam-badge cam-badge-danger">500</span></td><td>Server error</td></tr>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

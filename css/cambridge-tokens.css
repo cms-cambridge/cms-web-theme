@@ -1,0 +1,523 @@
+/*!
+ * Cambridge web theme — framework-agnostic build.
+ *
+ * No Bootstrap, no build step: link this file and use the .cam-* classes
+ * below. If your project already uses Bootstrap, use dist/cambridge-theme.css
+ * instead (same tokens, mapped onto Bootstrap's own component classes).
+ *
+ * Two header compositions ship, because "a site" covers two different
+ * shapes and one header doesn't fit both:
+ *   .cam-header       — a single row (wordmark, nav, actions) for an app,
+ *                        tool or dashboard, where the header's only job is
+ *                        navigation and the real content starts immediately.
+ *   .cam-masthead +
+ *   .cam-hero         — an identity band and a title band, for a content
+ *                        or marketing page (a homepage, an about page, a
+ *                        project site) where the page itself has something
+ *                        to say before you get to the content.
+ * Pick one per page, not both. See README.md and docs/style-guide.html for
+ * when each earns its place, and .cam-prose below for long-form content.
+ *
+ * Derived from mf-service (github.com/cms-cambridge/mf-service), reading the
+ * Cambridge brand guidelines against how the university's own departmental
+ * sites apply them (phy.cam.ac.uk, mus.cam.ac.uk) rather than the guidelines
+ * alone. See README.md for the reasoning behind each call.
+ */
+
+:root {
+      /* --- GENERATED TOKENS: start (see tokens/tokens.json) --- */
+  /* Pantone 547. The dominant structural colour: body text, headings, primary buttons, nav text. Not an accent — this is the colour the page is built from. */
+  --cam-ink: #133844;
+  /* Hover/active shade of ink (primary button hover). */
+  --cam-ink-deep: #0c262e;
+  /* Secondary text. Darkened from a first pass (#5b7480) to clear WCAG AA (4.5:1) on both --bg and --surface. */
+  --cam-muted: #526b77;
+  /* Page background. */
+  --cam-bg: #f7f8f9;
+  /* Card/panel background. */
+  --cam-surface: #ffffff;
+  /* Default hairline border. */
+  --cam-line: #dfe4e7;
+  /* Hover/emphasis border. */
+  --cam-line-strong: #bcc7cc;
+  /* Subtle fill for inputs, chips, quiet notices. */
+  --cam-fill: #eef1f3;
+  /* Pantone 326. The one accent colour — used at low density: a header rule, an active nav underline, a notice edge. Never a text or background fill by itself (fails AA both directions). */
+  --cam-teal: #00bdb6;
+  /* Darkened teal for hover text and for anything teal that needs to carry text-level contrast (AA-safe on --bg and --fill). */
+  --cam-teal-ink: #00666b;
+  /* Red Ribbon. Errors only. */
+  --cam-danger: #d6083b;
+  /* Focus ring colour — same as ink. */
+  --cam-focus: #133844;
+  /* Science Blue. Categorical data series 1. */
+  --cam-chart-anon: #0072cf;
+  /* Tango. Categorical data series 2. */
+  --cam-chart-github: #ea7125;
+  /* Purple Heart. Categorical data series 3. */
+  --cam-chart-compute: #8f2bbc;
+  /* Empty/zero state for charts. */
+  --cam-chart-empty: #dbe3e7;
+  /* Cambridge's specified secondary face. Body text, UI chrome. */
+  --cam-font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  /* Stand-in for Feijoa (Klim Type Foundry, no free web-embeddable licence). Headings and the wordmark only. */
+  --cam-font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  /* Chips, small controls. */
+  --cam-radius-sm: 3px;
+  /* Inputs, cards, panels. */
+  --cam-radius-md: 4px;
+  /* Primary buttons. */
+  --cam-radius-pill: 999px;
+  /* --- GENERATED TOKENS: end --- */
+}
+
+/* ---------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* A bare <button> should look and act clickable even before you opt it
+   into .cam-btn's pill styling — most of the time you'll want a plain
+   button that carries its own colour (a toolbar toggle, a chip's remove
+   control) rather than the primary-action look. This is function only:
+   no colour, no border, no padding. */
+button { font: inherit; cursor: pointer; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--cam-bg);
+  color: var(--cam-ink);
+  font: 16px/1.5 var(--cam-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--cam-font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--cam-ink);
+}
+
+/* Zeroed above, not left to the UA stylesheet's em-relative defaults: a
+   consumer that overrides font-size (h1 here is 2rem, not the UA
+   default's implicit ~2em) would otherwise inherit a default margin
+   computed against the NEW size (0.67em of 2rem ≈ 21px), not the size
+   the browser's own default pairs it with. Confirmed by a byte-for-byte
+   port of mf-service onto this theme: its own h1 rule already zeroed
+   margin, and dropping that in favour of "the theme covers it" produced
+   a ~21px gap the original never had. */
+h1 { font-size: 2rem; letter-spacing: -0.015em; line-height: 1.15; }
+h2 { font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0; }
+h3 { font-size: 1.1rem; }
+
+a {
+  color: var(--cam-ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover { color: var(--cam-teal-ink); }
+
+/* The wordmark treatment: an italic serif word, used as a link or heading
+   inline. Cambridge's Feijoa italic stands in for the department's own
+   logotype — don't use this for arbitrary emphasis, only for your own
+   product/site name. */
+.cam-brand {
+  font-family: var(--cam-font-serif);
+  font-style: italic;
+  font-weight: inherit;
+}
+
+/* ---------------------------------------------------------------------
+   Header: a single row — wordmark, nav links, right-aligned actions —
+   separated from the page body by one accent rule. No masthead band, no
+   hero: both were tried against this palette and read as over-branded for
+   an internal tool. Keep the header to this one job.
+   ------------------------------------------------------------------- */
+
+.cam-header {
+  background: var(--cam-surface);
+  border-bottom: 3px solid var(--cam-teal);
+}
+
+.cam-header-inner {
+  /* width:min(...)+margin:auto+no side padding, not max-width+padding: at
+     the point max-width would start clamping, box-sizing:border-box would
+     eat the side padding out of the content area instead of the gutter,
+     narrowing the nav by exactly that padding on wide viewports. This
+     keeps the same 1.5rem-equivalent gutter without that pinch. */
+  width: min(76rem, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 0.85rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 1.35rem;
+}
+
+/* Italic comes from the wordmark's own .cam-brand markup (an <em>), not
+   from here: a font-style set directly on this link, even though the
+   visible glyphs are unchanged either way, was enough to shift which
+   fallback-font metrics Chromium's flex sizing picked up for it as a
+   flex item, giving the header row a few extra px of height that the
+   original never had. Confirmed by a byte-for-byte port of mf-service
+   onto this theme, at the header/nav level specifically. */
+.cam-brand-link {
+  margin-right: 1.1rem;
+  font-family: var(--cam-font-serif);
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: var(--cam-ink);
+  text-decoration: none;
+  /* Matches .cam-nav-link's padding/border-bottom exactly, on purpose:
+     confirmed by a byte-for-byte port of mf-service onto this theme that
+     the original wordmark link — plain markup, no distinct "brand" class
+     wrapper of its own — picked these up from the generic nav-link rule
+     it also matched, and they set the header row's actual height (a
+     transparent border still takes up box space). Without them here the
+     header measures a few px shorter than mf-service's original. */
+  padding: 0.15rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.cam-brand-link:hover { color: var(--cam-ink); }
+
+.cam-nav-link {
+  font-size: 0.92rem;
+  color: var(--cam-ink);
+  text-decoration: none;
+  padding: 0.15rem 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.cam-nav-link:hover {
+  color: var(--cam-teal-ink);
+  border-bottom-color: var(--cam-teal);
+}
+
+.cam-nav-link.is-current {
+  border-bottom-color: var(--cam-ink);
+  font-weight: 600;
+}
+
+.cam-nav-gap { flex: 1; }
+
+/* ---------------------------------------------------------------------
+   Masthead + hero — the alternate header, for a content or marketing
+   page rather than an app. The masthead carries the identity on its own
+   band; the hero carries the page's own title underneath it. Together
+   they cost more vertical space than .cam-header, which is the point:
+   use them where the page has something to introduce, not for a tool
+   whose header is pure navigation chrome.
+   ------------------------------------------------------------------- */
+
+.cam-masthead {
+  background: var(--cam-surface);
+}
+
+.cam-masthead-inner {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1.05rem 1.5rem 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.cam-masthead-id {
+  font-family: var(--cam-font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--cam-ink);
+  text-decoration: none;
+  padding-bottom: 0.22rem;
+  border-bottom: 3px solid var(--cam-teal);
+}
+
+.cam-masthead-id:hover { color: var(--cam-ink); }
+
+.cam-masthead-unit {
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--cam-line-strong);
+  color: var(--cam-muted);
+  font-size: 0.92rem;
+}
+
+.cam-hero {
+  background: var(--cam-fill);
+  border-top: 1px solid var(--cam-line);
+}
+
+.cam-hero-inner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 3.1rem 1.5rem 3.3rem;
+}
+
+.cam-hero h1 {
+  font-size: clamp(2.1rem, 5vw, 2.8rem);
+  line-height: 1.1;
+}
+
+.cam-hero p {
+  margin-top: 0.85rem;
+  max-width: 38em;
+  font-size: 1.02rem;
+  color: var(--cam-muted);
+}
+
+/* The deep variant: Pantone 547 as a full-bleed field, the way the
+   Cavendish Laboratory homepage uses it. Reach for this on a page's own
+   homepage, once — it's a strong move and reads as decoration if every
+   page in a site does it. */
+.cam-hero-deep {
+  background: var(--cam-ink);
+  color: #fff;
+}
+
+.cam-hero-deep h1,
+.cam-hero-deep p { color: #fff; }
+.cam-hero-deep p { opacity: 0.86; }
+.cam-hero-deep a { color: #fff; }
+
+/* ---------------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------------- */
+
+.cam-btn {
+  appearance: none;
+  display: inline-block;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--cam-ink);
+  color: #fff;
+  border: 0;
+  border-radius: var(--cam-radius-pill);
+  padding: 0.62rem 1.5rem;
+  cursor: pointer;
+}
+
+.cam-btn:hover { background: var(--cam-ink-deep); color: #fff; }
+.cam-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.cam-btn-outline {
+  background: transparent;
+  color: var(--cam-ink);
+  border: 1px solid var(--cam-line-strong);
+}
+
+.cam-btn-outline:hover {
+  background: var(--cam-fill);
+  color: var(--cam-ink);
+  border-color: var(--cam-line-strong);
+}
+
+/* ---------------------------------------------------------------------
+   Notices — a quiet inline banner (session/auth status, info asides).
+   Deliberately low-contrast: the teal edge carries the accent, the fill
+   stays neutral. An earlier pass used a pale mint fill; it read as
+   louder than a status line needs to be.
+   ------------------------------------------------------------------- */
+
+.cam-notice {
+  padding: 0.6rem 0.85rem;
+  background: var(--cam-fill);
+  border-left: 3px solid var(--cam-teal-ink);
+  font-size: 0.88rem;
+}
+
+.cam-notice-warn { border-left-color: var(--cam-danger); }
+
+/* ---------------------------------------------------------------------
+   Cards / panels
+   ------------------------------------------------------------------- */
+
+.cam-card {
+  background: var(--cam-surface);
+  border: 1px solid var(--cam-line);
+  border-radius: var(--cam-radius-md);
+  padding: 0.85rem 1rem;
+}
+
+.cam-card:hover { border-color: var(--cam-line-strong); }
+
+/* ---------------------------------------------------------------------
+   Forms
+   ------------------------------------------------------------------- */
+
+.cam-input,
+.cam-select {
+  font: inherit;
+  color: var(--cam-ink);
+  background-color: var(--cam-surface);
+  border: 1px solid var(--cam-line);
+  border-radius: var(--cam-radius-md);
+  padding: 0.45rem 0.65rem;
+  width: 100%;
+}
+
+.cam-select {
+  appearance: none;
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path fill='none' stroke='%23133844' stroke-width='1.4' d='M1 1.5 6 6.5 11 1.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+}
+
+.cam-input:hover,
+.cam-select:hover { border-color: var(--cam-line-strong); }
+
+.cam-input:focus,
+.cam-select:focus,
+.cam-btn:focus-visible,
+.cam-nav-link:focus-visible {
+  outline: 2px solid var(--cam-focus);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------
+   Tables
+   ------------------------------------------------------------------- */
+
+.cam-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.cam-table th,
+.cam-table td {
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  border-bottom: 1px solid var(--cam-line);
+}
+
+.cam-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cam-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ---------------------------------------------------------------------
+   Status badges — for anything that needs colour to carry meaning
+   rather than just accent it: HTTP codes and job states on a tool, a
+   tag or subject area on a content page. Uses the full six-colour
+   primary palette, held back for exactly this one purpose. Each pairs
+   a full-strength fill with a WCAG-AA-safe darkened text/border shade
+   — see README.md's contrast table before adding a new one.
+   ------------------------------------------------------------------- */
+
+.cam-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: var(--cam-radius-sm);
+  padding: 0.1rem 0.45rem;
+  color: #fff;
+}
+
+.cam-badge-info    { background: #005a9e; } /* Science Blue, darkened for AA */
+.cam-badge-success { background: #3e7a14; } /* Vida Loca, darkened for AA */
+.cam-badge-warn    { background: #b4521a; } /* Tango, darkened for AA */
+.cam-badge-danger  { background: var(--cam-danger); }
+.cam-badge-accent  { background: #8f2bbc; } /* Purple Heart — holds white at AA as-is */
+
+/* ---------------------------------------------------------------------
+   Utility
+   ------------------------------------------------------------------- */
+
+.cam-muted { color: var(--cam-muted); }
+.cam-container { max-width: 40rem; margin: 0 auto; padding: 0 1.25rem; }
+.cam-container-wide { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
+
+/* ---------------------------------------------------------------------
+   Prose — long-form content: an about page, a blog post, documentation
+   body text. Not needed on an app's own UI, which mostly isn't prose.
+   Apply to a wrapping element (an <article>, a content <div>); it styles
+   its own children rather than requiring a class on each one.
+   ------------------------------------------------------------------- */
+
+.cam-prose {
+  max-width: 40rem;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.cam-prose > * + * { margin-top: 1.1em; }
+
+.cam-prose h2 {
+  margin-top: 2em;
+  font-size: 1.5rem;
+}
+
+.cam-prose h3 { font-size: 1.15rem; }
+
+.cam-prose ul,
+.cam-prose ol {
+  padding-left: 1.4em;
+}
+
+.cam-prose li + li { margin-top: 0.4em; }
+
+.cam-prose blockquote {
+  margin: 1.4em 0;
+  padding: 0.2em 0 0.2em 1.1em;
+  border-left: 3px solid var(--cam-teal);
+  color: var(--cam-muted);
+  font-style: italic;
+}
+
+.cam-prose figure { margin: 1.6em 0; }
+
+.cam-prose figcaption {
+  margin-top: 0.5em;
+  font-size: 0.85rem;
+  color: var(--cam-muted);
+}
+
+.cam-prose img,
+.cam-prose video { border-radius: var(--cam-radius-md); }
+
+/* ---------------------------------------------------------------------
+   Site footer — for a page's own closing band, distinct from an app's
+   thin one-line footer (which just uses a <footer> with your own
+   spacing, as in the framework examples). This one is a full band,
+   for a homepage or a content page that wants a proper close.
+   ------------------------------------------------------------------- */
+
+.cam-footer {
+  margin-top: 3rem;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--cam-line);
+  color: var(--cam-muted);
+  font-size: 0.88rem;
+}
+
+.cam-footer-inner {
+  max-width: 76rem;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+}
+
+.cam-footer a { color: var(--cam-muted); }
+.cam-footer a:hover { color: var(--cam-teal-ink); }

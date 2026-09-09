@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambridge web theme — style guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/cambridge-tokens.css">
+<link rel="stylesheet" href="../dist/cambridge-theme.css">
+<style>
+  /* Doc-page-only styling, not part of the shipped theme. */
+  .doc-section { max-width: 64rem; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  .doc-section + .doc-section { border-top: 1px solid var(--cam-line); }
+  .doc-section h2 { margin-top: 0; }
+  .doc-lede { color: var(--cam-muted); max-width: 42em; }
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+  .swatch { border: 1px solid var(--cam-line); border-radius: var(--cam-radius-md); overflow: hidden; }
+  .swatch-color { height: 4.5rem; }
+  .swatch-meta { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
+  .swatch-meta code { display: block; margin: 0.15rem 0; }
+  .swatch-ratio { font-size: 0.78rem; color: var(--cam-muted); }
+  .swatch-ratio.pass::before { content: "✓ AA "; color: #3e7a14; }
+  .swatch-ratio.fail::before { content: "✕ fails AA "; color: var(--cam-danger); }
+  .demo-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin: 0.75rem 0; }
+  .demo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1rem 0; }
+  .demo-pair > div { min-width: 0; }
+  .demo-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cam-muted); margin: 0 0 0.5rem; }
+  .dont { border-left: 3px solid var(--cam-danger); padding: 0.1rem 0 0.1rem 1rem; margin: 0.75rem 0; }
+  .do { border-left: 3px solid #3e7a14; padding: 0.1rem 0 0.1rem 1rem; margin: 0.75rem 0; }
+  pre.code { background: #10262d; color: #eef5f6; padding: 0.9rem 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.82rem; }
+  @media (max-width: 640px) { .demo-pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="cam-header">
+  <div class="cam-header-inner">
+    <a class="cam-brand-link" href="#top">cms-web-theme</a>
+    <a class="cam-nav-link" href="https://github.com/cms-cambridge/cms-web-theme">GitHub</a>
+    <a class="cam-nav-link" href="../examples/bootstrap-example.html">Bootstrap example</a>
+    <a class="cam-nav-link" href="../examples/vanilla-example.html">Vanilla example</a>
+    <a class="cam-nav-link" href="../examples/content-page.html">Content page example</a>
+  </div>
+</header>
+
+<div class="doc-section" id="top">
+  <h1><em class="cam-brand">Cambridge web theme</em></h1>
+  <p class="doc-lede">
+    A shared visual identity for internally hosted services — the colour,
+    type and component styling worked out on <a href="https://github.com/cms-cambridge/mf-service">mf-service</a>,
+    packaged for reuse. Ships as a Bootstrap 5 theme and as framework-agnostic
+    CSS, generated from the same token file.
+  </p>
+  <p class="doc-lede">
+    <strong>This is not an official University of Cambridge design system.</strong>
+    It's one team's reading of the
+    <a href="https://www.cam.ac.uk/brand-resources/guidelines">brand guidelines</a>,
+    checked against how two departmental sites apply them
+    (<a href="https://www.phy.cam.ac.uk/">phy.cam.ac.uk</a>,
+    <a href="https://www.mus.cam.ac.uk/">mus.cam.ac.uk</a>) rather than the
+    guidelines in isolation. Direct fetches to those sites were blocked in the
+    sandbox this was built in, so the read on their structure came from a
+    screenshot the requester supplied partway through, not a systematic
+    survey — treat this as a considered starting point, not a verified
+    reproduction. If you're building something that needs to match precisely,
+    look at the live sites yourself.
+  </p>
+</div>
+
+<div class="doc-section">
+  <h2>Quickstart</h2>
+  <div class="demo-pair">
+    <div>
+      <p class="demo-label">Using Bootstrap</p>
+<pre class="code">&lt;link rel="stylesheet"
+      href="cms-web-theme/dist/cambridge-theme.css"&gt;</pre>
+      <p class="doc-lede">
+        A full Bootstrap 5 build with the tokens already applied. Link this
+        <em>instead of</em> bootstrap.css, not alongside it. Use Bootstrap's
+        own classes (<code>.btn</code>, <code>.navbar</code>, <code>.card</code>…)
+        plus the handful of <code>.cam-*</code> and <code>-cambridge</code>
+        additions below.
+      </p>
+    </div>
+    <div>
+      <p class="demo-label">No Bootstrap, no build step</p>
+<pre class="code">&lt;link rel="stylesheet"
+      href="cms-web-theme/css/cambridge-tokens.css"&gt;</pre>
+      <p class="doc-lede">
+        CSS custom properties (<code>--cam-*</code>) plus a small set of
+        namespaced component classes (<code>.cam-btn</code>,
+        <code>.cam-card</code>, <code>.cam-nav-link</code>…). Nothing to
+        compile.
+      </p>
+    </div>
+  </div>
+  <p class="doc-lede">
+    Both add the same Google Fonts link (Open Sans + Source Serif 4) — see
+    README.md for the exact <code>&lt;link&gt;</code> tag and why those two
+    faces.
+  </p>
+</div>
+
+<div class="doc-section">
+  <h2>Colour</h2>
+  <p class="doc-lede">
+    Pantone 547 (<code>--cam-ink</code>) is the dominant colour — text,
+    headings, buttons, nav. Pantone 326 (<code>--cam-teal</code>) is the one
+    accent, used at low density: a header rule, an active underline, a
+    notice's edge. It is <strong>never</strong> a text or fill colour on its
+    own — both directions fail contrast (see table). This mirrors how
+    phy.cam.ac.uk and mus.cam.ac.uk actually use colour: close to
+    monochrome, not the six-colour brand palette applied broadly.
+  </p>
+
+  <h3>Structural palette</h3>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#133844"></div>
+      <div class="swatch-meta"><strong>Ink</strong> — Pantone 547<code>--cam-ink #133844</code>
+      <span class="swatch-ratio pass">12.5:1 on white</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0c262e"></div>
+      <div class="swatch-meta"><strong>Ink, deep</strong><code>--cam-ink-deep #0c262e</code>
+      <span class="swatch-ratio pass">15.8:1 on white</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#526b77"></div>
+      <div class="swatch-meta"><strong>Muted text</strong><code>--cam-muted #526b77</code>
+      <span class="swatch-ratio pass">5.3:1 on --bg</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#00bdb6"></div>
+      <div class="swatch-meta"><strong>Teal</strong> — Pantone 326, accent only<code>--cam-teal #00bdb6</code>
+      <span class="swatch-ratio fail">2.2:1 as text — rules/edges only</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#00666b"></div>
+      <div class="swatch-meta"><strong>Teal, darkened</strong> — for teal text<code>--cam-teal-ink #00666b</code>
+      <span class="swatch-ratio pass">6.3:1 on --bg</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#d6083b"></div>
+      <div class="swatch-meta"><strong>Danger</strong> — Red Ribbon<code>--cam-danger #d6083b</code>
+      <span class="swatch-ratio pass">5.3:1 white text on it</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#f7f8f9; border-bottom:1px solid #dfe4e7"></div>
+      <div class="swatch-meta"><strong>Page background</strong><code>--cam-bg #f7f8f9</code></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#eef1f3; border-bottom:1px solid #dfe4e7"></div>
+      <div class="swatch-meta"><strong>Fill</strong> — inputs, chips<code>--cam-fill #eef1f3</code></div>
+    </div>
+  </div>
+
+  <h3>Categorical palette — status &amp; charts only</h3>
+  <p class="doc-lede">
+    The full six-colour primary palette. Reserved for data that needs colour
+    to carry meaning — HTTP status codes, job states, chart series — never
+    used decoratively. Raw brand hexes are too light for white text at AA;
+    each has a darkened companion shade below it.
+  </p>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0072cf"></div>
+      <div class="swatch-meta"><strong>Science Blue</strong><code>#0072cf</code>
+      <span class="swatch-ratio pass">4.9:1 white text — OK as-is</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#005a9e"></div>
+      <div class="swatch-meta"><strong>Science Blue, darkened</strong><code>#005a9e</code>
+      <span class="swatch-ratio pass">7.1:1 white text</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#55a51c"></div>
+      <div class="swatch-meta"><strong>Vida Loca</strong><code>#55a51c</code>
+      <span class="swatch-ratio fail">3.1:1 white text — too light</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#3e7a14"></div>
+      <div class="swatch-meta"><strong>Vida Loca, darkened</strong><code>#3e7a14</code>
+      <span class="swatch-ratio pass">5.3:1 white text</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#ea7125"></div>
+      <div class="swatch-meta"><strong>Tango</strong><code>#ea7125</code>
+      <span class="swatch-ratio fail">3.1:1 white text — too light</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#b4521a"></div>
+      <div class="swatch-meta"><strong>Tango, darkened</strong><code>#b4521a</code>
+      <span class="swatch-ratio pass">5.1:1 white text</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#8f2bbc"></div>
+      <div class="swatch-meta"><strong>Purple Heart</strong><code>#8f2bbc</code>
+      <span class="swatch-ratio pass">6.5:1 white text — OK as-is</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#00b1c1"></div>
+      <div class="swatch-meta"><strong>Pacific Blue</strong><code>#00b1c1</code>
+      <span class="swatch-ratio fail">2.6:1 white text — too light, no darkened variant shipped, mix your own if you need it</span></div>
+    </div>
+  </div>
+  <p class="doc-lede">
+    Every ratio above was computed against the actual hex pairs (relative
+    luminance / WCAG contrast formula), not estimated. The shipped chart
+    palette in <code>tokens.json</code> deliberately skips Vida Loca and
+    Pacific Blue — they sit too close to Science Blue and each other for
+    colour-blind readers to tell apart in a stacked chart; it uses Science
+    Blue, Tango and Purple Heart instead.
+  </p>
+</div>
+
+<div class="doc-section">
+  <h2>Typography</h2>
+  <p class="doc-lede">
+    Two faces, per the brand guidelines: <strong>Open Sans</strong> for body
+    text and UI chrome, <strong>Source Serif 4</strong> for headings and the
+    wordmark. Source Serif 4 stands in for Feijoa — the guideline's actual
+    display serif — which is a commercial Klim Type Foundry face with no
+    free web-embeddable licence. If your organisation has a Feijoa licence,
+    swap <code>--cam-font-serif</code> and you're done; nothing else
+    references the face by name.
+  </p>
+  <pre class="code">&lt;link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&amp;display=swap" rel="stylesheet"&gt;</pre>
+  <h1 style="margin-top:1.5rem;">Heading — Source Serif 4, 600</h1>
+  <h2>Subheading — Source Serif 4, 600</h2>
+  <p>Body text — Open Sans, 400. <em class="cam-brand">A wordmark — Open Sans base, but the wordmark itself is Source Serif 4 italic.</em></p>
+</div>
+
+<div class="doc-section">
+  <h2>Header — two compositions</h2>
+  <p class="doc-lede">
+    Which one to reach for depends on what the header's job is on that
+    page, not on which one looks "more branded."
+  </p>
+
+  <h3>.cam-header — one row, for an app or tool</h3>
+  <p class="doc-lede">
+    Wordmark, then nav links, then right-aligned account actions —
+    separated from the page body by a single 3px accent rule. Nothing
+    else. This is what mf-service uses: its header's only job is
+    navigation, and the real content — a file picker, a dashboard — starts
+    immediately underneath.
+  </p>
+  <div class="do">
+    <strong>Do</strong> keep it to that one job when the page itself is a
+    tool. Two early drafts of this composition tried a full masthead band
+    and a hero underneath it, on mf-service specifically — both were
+    pulled after review: for a small internal tool, they read as
+    over-branded and pushed real content below the fold for no benefit.
+  </div>
+  <div class="dont">
+    <strong>Don't</strong> add a coloured bar, gradient, or block pattern
+    across the top purely as decoration. An early draft built a six-colour
+    block bar from the full primary palette because it looked
+    "Cambridge-branded" — neither phy.cam.ac.uk nor mus.cam.ac.uk has
+    anything like it. If a swatch of colour doesn't correspond to
+    something (an accent rule, a status), it doesn't belong.
+  </div>
+
+  <h3>.cam-masthead + .cam-hero — for a content or marketing page</h3>
+  <p class="doc-lede">
+    An identity band, then a title band underneath — modelled directly on
+    how phy.cam.ac.uk and mus.cam.ac.uk open their own homepages. Use it
+    when the page itself has something to introduce: a homepage, an about
+    page, a project site. See <code>examples/content-page.html</code>.
+  </p>
+  <div class="cam-masthead" style="border:1px solid var(--cam-line); margin: 1rem 0 0;">
+    <div style="max-width:none; padding: 0.85rem 1.25rem; display:flex; align-items:center; gap:0.9rem;">
+      <a class="cam-masthead-id" href="#">Your Group Name</a>
+      <span class="cam-masthead-unit">Department, University of Cambridge</span>
+    </div>
+  </div>
+  <div class="cam-hero cam-hero-deep" style="margin: 0 0 1rem;">
+    <div style="max-width:none; padding: 2rem 1.25rem;">
+      <h1 style="font-size:1.8rem;">What this page introduces</h1>
+      <p>A line under the title, same as the masthead pairs above it.</p>
+    </div>
+  </div>
+  <p class="doc-lede">
+    <code>.cam-hero-deep</code> is the strong, full-bleed Pantone 547
+    variant (the Cavendish Laboratory's homepage does this). Drop it for
+    the plain <code>.cam-hero</code> (a pale fill) on any page that isn't
+    that one strong homepage moment — every page doing the deep version
+    reads as decoration rather than a statement.
+  </p>
+</div>
+
+<div class="doc-section">
+  <h2>Components</h2>
+
+  <h3>Buttons</h3>
+  <div class="demo-pair">
+    <div>
+      <p class="demo-label">Bootstrap</p>
+      <div class="demo-row">
+        <button class="btn btn-primary">Submit</button>
+        <button class="btn btn-outline-secondary">Cancel</button>
+        <button class="btn btn-primary" disabled>Disabled</button>
+      </div>
+    </div>
+    <div>
+      <p class="demo-label">Vanilla</p>
+      <div class="demo-row">
+        <button class="cam-btn">Submit</button>
+        <button class="cam-btn cam-btn-outline">Cancel</button>
+        <button class="cam-btn" disabled>Disabled</button>
+      </div>
+    </div>
+  </div>
+
+  <h3>Notice / status line</h3>
+  <div class="demo-pair">
+    <div>
+      <p class="demo-label">Bootstrap</p>
+      <div class="alert alert-cambridge" role="status">Signed in as jbloggs.</div>
+    </div>
+    <div>
+      <p class="demo-label">Vanilla</p>
+      <p class="cam-notice" role="status">Signed in as jbloggs.</p>
+    </div>
+  </div>
+
+  <h3>Card</h3>
+  <div class="demo-pair">
+    <div>
+      <p class="demo-label">Bootstrap</p>
+      <div class="card"><div class="card-body">
+        <h4 class="card-title h6">Choose files</h4>
+        <p class="card-text text-secondary">Accepts .csv up to 10MB.</p>
+      </div></div>
+    </div>
+    <div>
+      <p class="demo-label">Vanilla</p>
+      <div class="cam-card">
+        <strong>Choose files</strong>
+        <p class="cam-muted" style="margin:0.35rem 0 0;">Accepts .csv up to 10MB.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Status badges</h3>
+  <div class="demo-pair">
+    <div>
+      <p class="demo-label">Bootstrap</p>
+      <div class="demo-row">
+        <span class="badge badge-cam-success">200</span>
+        <span class="badge badge-cam-info">302</span>
+        <span class="badge badge-cam-warning">400</span>
+        <span class="badge bg-danger">500</span>
+        <span class="badge badge-cam-accent">async</span>
+      </div>
+    </div>
+    <div>
+      <p class="demo-label">Vanilla</p>
+      <div class="demo-row">
+        <span class="cam-badge cam-badge-success">200</span>
+        <span class="cam-badge cam-badge-info">302</span>
+        <span class="cam-badge cam-badge-warn">400</span>
+        <span class="cam-badge cam-badge-danger">500</span>
+        <span class="cam-badge cam-badge-accent">async</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Prose</h3>
+  <p class="doc-lede">
+    For long-form content — an about page, a blog post, documentation
+    body text. Apply <code>.cam-prose</code> to a wrapping element and it
+    styles its own children; nothing else in this theme needs it, since
+    an app's own UI mostly isn't prose.
+  </p>
+  <div class="cam-prose" style="border:1px solid var(--cam-line); border-radius:var(--cam-radius-md); padding:1.25rem 1.5rem; background:var(--cam-surface);">
+    <h2 style="margin-top:0;">A prose heading</h2>
+    <p>An ordinary paragraph, at the line-height and measure long-form text wants — different from the tighter UI text elsewhere in this theme.</p>
+    <blockquote>A pull quote sits like this: the one accent colour, as a rule rather than a fill.</blockquote>
+    <ul>
+      <li>List spacing</li>
+      <li>is part of the rhythm too</li>
+    </ul>
+  </div>
+</div>
+
+<div class="doc-section">
+  <h2>Provenance</h2>
+  <p class="doc-lede">
+    This theme was extracted from
+    <a href="https://github.com/cms-cambridge/mf-service">mf-service</a>
+    after several iterations: a first pass applied the brand's colour and
+    type facts directly and over-produced (a decorative colour bar,
+    Science-Blue-as-dominant, coloured rules under every heading); a second
+    pass, checked against real screenshots of phy.cam.ac.uk and
+    mus.cam.ac.uk, corrected course toward the close-to-monochrome, ink +
+    single-accent look this theme ships; a third pass pared a masthead and
+    hero band back out of mf-service specifically, once they read as
+    over-branded in context on that particular small tool.
+  </p>
+  <p class="doc-lede">
+    A fourth pass then ported mf-service's own, by-then-settled page onto
+    this package as a check that the two actually matched — not by eye,
+    by diffing rendered pixels and computed styles. They didn't, at
+    first: a stray <code>p { line-height: 1.55 }</code> fought the app's
+    own <code>1.5</code> and drifted the whole page down by degrees; an
+    unreset <code>h1</code> margin let the browser's own em-relative
+    default back in once the heading's font-size changed; the wordmark
+    link was a few px short of the original because that original had
+    picked up padding and a border incidentally, from also matching a
+    broader nav-link selector. All three are fixed in what ships now.
+    That same pass also broadened the theme past mf-service's own shape —
+    <code>.cam-masthead</code>, <code>.cam-hero</code> and
+    <code>.cam-prose</code> exist because "a single-row header and no
+    content typography" was a reasonable shape for mf-service, not a
+    reasonable ceiling for "a site" in general.
+  </p>
+  <p class="doc-lede">
+    Nothing here should be treated as verified against the University's
+    own design system — it's a considered, iterated approximation, not a
+    specification. If you use this on a site that isn't an official
+    University of Cambridge page, say so somewhere the reader will see it
+    — a judgement call per site, not a rule this theme enforces.
+  </p>
+</div>
+
+</body>
+</html>

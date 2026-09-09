@@ -1,0 +1,95 @@
+// GENERATED FILE — do not edit directly.
+// Source: tokens/tokens.json. Regenerate with `npm run build:tokens`.
+//
+// Bootstrap variable overrides. This file must be @imported BEFORE
+// "bootstrap/scss/bootstrap" — Bootstrap only picks up a variable if it
+// isn't already set (`!default`), so order matters.
+
+// Pantone 547. The dominant structural colour: body text, headings, primary buttons, nav text. Not an accent — this is the colour the page is built from.
+$cam-ink: #133844;
+
+// Hover/active shade of ink (primary button hover).
+$cam-ink-deep: #0c262e;
+
+// Secondary text. Darkened from a first pass (#5b7480) to clear WCAG AA (4.5:1) on both --bg and --surface.
+$cam-muted: #526b77;
+
+// Page background.
+$cam-bg: #f7f8f9;
+
+// Card/panel background.
+$cam-surface: #ffffff;
+
+// Default hairline border.
+$cam-line: #dfe4e7;
+
+// Hover/emphasis border.
+$cam-line-strong: #bcc7cc;
+
+// Subtle fill for inputs, chips, quiet notices.
+$cam-fill: #eef1f3;
+
+// Pantone 326. The one accent colour — used at low density: a header rule, an active nav underline, a notice edge. Never a text or background fill by itself (fails AA both directions).
+$cam-teal: #00bdb6;
+
+// Darkened teal for hover text and for anything teal that needs to carry text-level contrast (AA-safe on --bg and --fill).
+$cam-teal-ink: #00666b;
+
+// Red Ribbon. Errors only.
+$cam-danger: #d6083b;
+
+// Focus ring colour — same as ink.
+$cam-focus: #133844;
+
+// Science Blue. Categorical data series 1.
+$cam-chart-anon: #0072cf;
+
+// Tango. Categorical data series 2.
+$cam-chart-github: #ea7125;
+
+// Purple Heart. Categorical data series 3.
+$cam-chart-compute: #8f2bbc;
+
+// Empty/zero state for charts.
+$cam-chart-empty: #dbe3e7;
+
+// Cambridge's specified secondary face. Body text, UI chrome.
+$cam-font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+
+// Stand-in for Feijoa (Klim Type Foundry, no free web-embeddable licence). Headings and the wordmark only.
+$cam-font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+
+// Chips, small controls.
+$cam-radius-sm: 3px;
+
+// Inputs, cards, panels.
+$cam-radius-md: 4px;
+
+// Primary buttons.
+$cam-radius-pill: 999px;
+
+// Map onto the Bootstrap variables that drive its component styles.
+$body-color:              $cam-ink;
+$body-bg:                 $cam-bg;
+$primary:                 $cam-ink;
+$secondary:               $cam-muted;
+$danger:                  $cam-danger;
+$info:                    $cam-teal-ink;
+$border-color:            $cam-line;
+$link-color:              $cam-ink;
+$link-hover-color:        $cam-teal-ink;
+$font-family-sans-serif:  $cam-font-sans;
+$font-family-base:        $cam-font-sans;
+$headings-font-family:    $cam-font-serif;
+$headings-font-weight:    600;
+$headings-color:          $cam-ink;
+$border-radius:           $cam-radius-md;
+$border-radius-sm:        $cam-radius-sm;
+$border-radius-lg:        $cam-radius-md;
+$border-radius-pill:      $cam-radius-pill;
+$btn-border-radius:       $cam-radius-pill;
+$btn-border-radius-sm:    $cam-radius-pill;
+$btn-border-radius-lg:    $cam-radius-pill;
+$focus-ring-color:        rgba($cam-focus, 0.35);
+$enable-negative-margins: true;
+

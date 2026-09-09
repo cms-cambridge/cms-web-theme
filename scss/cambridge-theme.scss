@@ -1,0 +1,17 @@
+// Cambridge web theme — Bootstrap 5 build.
+//
+// Usage from your own project (after `npm install bootstrap sass` and this
+// package):
+//
+//   @import "cms-web-theme/scss/cambridge-theme";
+//
+// Or just link the precompiled dist/cambridge-theme.css and skip Sass
+// entirely — see README.md.
+//
+// This file is three imports, in an order that matters: the tokens have to
+// land before Bootstrap reads its own defaults, and the extra components
+// need Bootstrap's variables in scope.
+
+@import "tokens";
+@import "bootstrap/scss/bootstrap";
+@import "components";

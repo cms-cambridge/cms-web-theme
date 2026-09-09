@@ -1,0 +1,156 @@
+// Additive component styles layered on top of stock Bootstrap. Bootstrap's
+// own classes (.btn, .navbar, .card, .alert, .badge, .table, .form-control…)
+// already carry the palette via the variable overrides in _tokens.scss —
+// this file only adds the handful of things Bootstrap has no variable for.
+
+// --- Wordmark --------------------------------------------------------
+// An italic serif word, for your own product/site name only — not a
+// general emphasis utility.
+.cam-brand {
+  font-family: $cam-font-serif;
+  font-style: italic;
+  font-weight: inherit;
+}
+
+// --- Navbar accent rule ------------------------------------------------
+// Cambridge departmental sites separate the header from the page with one
+// accent-coloured rule rather than a shadow or a second band. Add this
+// class alongside Bootstrap's .navbar.
+.navbar-cambridge {
+  border-bottom: 3px solid $cam-teal;
+
+  .nav-link {
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+
+    &:hover {
+      color: $cam-teal-ink;
+      border-bottom-color: $cam-teal;
+    }
+
+    &.active {
+      border-bottom-color: $cam-ink;
+      font-weight: 600;
+    }
+  }
+}
+
+// --- Quiet notice --------------------------------------------------------
+// Bootstrap's .alert-* variants are saturated fills, right for a dismissible
+// warning. For a session/status line that should sit quietly on the page
+// (auth state, an inline aside), use this instead: neutral fill, one
+// coloured edge.
+.alert-cambridge {
+  background: $cam-fill;
+  border: 0;
+  border-left: 3px solid $cam-teal-ink;
+  border-radius: $cam-radius-md;
+  color: $cam-ink;
+}
+
+// --- Masthead + hero — the alternate header ------------------------------
+// For a content or marketing page rather than an app: an identity band,
+// then a title band underneath. Bootstrap's own .navbar (+ .navbar-cambridge
+// above) stays the header for an app or tool. See css/cambridge-tokens.css
+// for the fuller comment on when each earns its place.
+
+.cam-masthead {
+  background: $cam-surface;
+}
+
+.cam-masthead-id {
+  font-family: $cam-font-serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 600;
+  color: $cam-ink;
+  text-decoration: none;
+  padding-bottom: 0.22rem;
+  border-bottom: 3px solid $cam-teal;
+
+  &:hover { color: $cam-ink; }
+}
+
+.cam-masthead-unit {
+  padding-left: 0.9rem;
+  border-left: 1px solid $cam-line-strong;
+  color: $cam-muted;
+  font-size: 0.92rem;
+}
+
+.cam-hero {
+  background: $cam-fill;
+  border-top: 1px solid $cam-line;
+  padding: 3.1rem 0 3.3rem;
+
+  h1 {
+    font-size: clamp(2.1rem, 5vw, 2.8rem);
+    line-height: 1.1;
+  }
+
+  p {
+    margin-top: 0.85rem;
+    max-width: 38em;
+    font-size: 1.02rem;
+    color: $cam-muted;
+  }
+}
+
+// The deep variant: Pantone 547 as a full-bleed field. Reach for this on
+// a page's own homepage, once — every page doing it reads as decoration.
+.cam-hero-deep {
+  background: $cam-ink;
+  color: #fff;
+
+  h1, p { color: #fff; }
+  p { opacity: 0.86; }
+  a { color: #fff; }
+}
+
+// --- Prose ----------------------------------------------------------------
+// Long-form content — an about page, a blog post, documentation body text.
+// Apply to a wrapping element; it styles its own children.
+
+.cam-prose {
+  max-width: 40rem;
+  font-size: 1.02rem;
+  line-height: 1.65;
+
+  > * + * { margin-top: 1.1em; }
+
+  h2 { margin-top: 2em; font-size: 1.5rem; }
+  h3 { font-size: 1.15rem; }
+
+  ul, ol { padding-left: 1.4em; }
+  li + li { margin-top: 0.4em; }
+
+  blockquote {
+    margin: 1.4em 0;
+    padding: 0.2em 0 0.2em 1.1em;
+    border-left: 3px solid $cam-teal;
+    color: $cam-muted;
+    font-style: italic;
+  }
+
+  figure { margin: 1.6em 0; }
+
+  figcaption {
+    margin-top: 0.5em;
+    font-size: 0.85rem;
+    color: $cam-muted;
+  }
+
+  img, video { border-radius: $cam-radius-md; }
+}
+
+// --- Categorical badges --------------------------------------------------
+// Bootstrap's .badge.bg-primary etc. already work (primary = ink). These
+// add the categorical palette for anything that needs colour to carry
+// meaning rather than accent it — HTTP codes and job states if you're
+// building a tool, but equally a tag, a category, a subject area on a
+// content page. Each is a darkened, AA-safe shade of the named primary
+// colour; see README.md's contrast table before adding another.
+.badge-cam-info    { background-color: #005a9e !important; } // Science Blue, darkened
+.badge-cam-success { background-color: #3e7a14 !important; } // Vida Loca, darkened
+.badge-cam-warning { background-color: #b4521a !important; } // Tango, darkened
+.badge-cam-accent  { background-color: #8f2bbc !important; } // Purple Heart, AA as-is
