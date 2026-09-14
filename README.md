@@ -154,14 +154,64 @@ than accent the page. Three of the six are too light for white text at AA;
 darkened companion shades ship for those. Full numbers, and which shades to
 use where, are in `docs/style-guide.html`.
 
+## Layout and margins
+
+One gutter, three widths, one formula. Every centred container in the theme
+is built the same way, so the header, the hero, the body and the footer line
+up at every viewport width:
+
+```css
+width: min(var(--cam-width-page), calc(100% - 2 * var(--cam-gutter)));
+margin-inline: auto;
+```
+
+| Token | Default | For |
+| --- | --- | --- |
+| `--cam-gutter` | `1.5rem` | Space between content and the viewport edge, everywhere |
+| `--cam-width-page` | `76rem` | Full-width bands: header, masthead, footer |
+| `--cam-width-wide` | `60rem` | Wide content: hero, dashboards, tables (`.cam-container-wide`) |
+| `--cam-width-text` | `40rem` | Reading measure: prose, forms (`.cam-container`, `.cam-prose`) |
+
+`width: min()` rather than `max-width` + padding is deliberate. With
+`box-sizing: border-box`, padding eats into the content area once a
+container hits its max-width, so two containers with the same `max-width`
+but different padding end up different widths — which is exactly how the
+header and masthead drifted 1.5rem out of line before this was unified.
+Bands that wrap an `-inner` (`.cam-footer`) therefore carry vertical
+padding only; the gutter belongs to the container, once.
+
+On the Bootstrap build, `$container-padding-x` is set from `$cam-gutter`,
+so Bootstrap's own `.container-*` share the same gutter, and
+`.cam-container` / `.cam-container-wide` exist there too with identical
+geometry to the vanilla build.
+
 ## Typography
 
 Open Sans (body, UI) + Source Serif 4 (headings, wordmark), per the brand
 guidelines' sans/serif pairing. Source Serif 4 stands in for Feijoa, the
-guidelines' actual display serif — a commercial Klim Type Foundry face with
-no free web-embeddable licence. If your org has a Feijoa licence, change
-`fontSerif` in `tokens/tokens.json` and rebuild; nothing else names the
-face.
+guidelines' actual display serif — a commercial face from the
+[Klim Type Foundry](https://klim.co.nz/fonts/feijoa/).
+
+### On using Feijoa itself
+
+The University licenses Feijoa and makes it available to staff: the
+[typography guidance](https://www.cam.ac.uk/brand-resources/guidelines/typography)
+points at the font downloads under
+[brand resources](https://www.cam.ac.uk/brand-resources), and University
+Managed Devices generally have it installed already. There is no public
+licence document to link to — the terms come with the download, behind
+Raven.
+
+That matters because a licence to *use* a font on your machine is not the
+same as a licence to *serve* it as a webfont. Before putting Feijoa on a
+public site, read the terms attached to the University's download and
+check with the brand team whether web embedding is covered by the
+University's agreement with Klim. This theme ships a free substitute
+precisely so nobody has to resolve that question to get started.
+
+If web embedding is covered for your site, change `fontSerif` in
+`tokens/tokens.json`, add your own `@font-face` block, and rebuild;
+nothing else in the theme names the face.
 
 ## Provenance
 

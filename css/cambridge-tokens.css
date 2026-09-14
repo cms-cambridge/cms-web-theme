@@ -28,6 +28,10 @@
   --cam-chart-empty: #dbe3e7;
   --cam-font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
   --cam-font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --cam-gutter: 1.5rem;
+  --cam-width-page: 76rem;
+  --cam-width-wide: 60rem;
+  --cam-width-text: 40rem;
   --cam-radius-sm: 3px;
   --cam-radius-md: 4px;
   --cam-radius-pill: 999px;
@@ -39,6 +43,16 @@
    ------------------------------------------------------------------- */
 
 *, *::before, *::after { box-sizing: border-box; }
+
+/* Every centred container in this file uses one formula:
+     width: min(<a width token>, calc(100% - 2 * var(--cam-gutter)));
+     margin-inline: auto;
+   width:min() rather than max-width+padding because with border-box the
+   padding would eat into the content area at the clamp point, so two
+   containers with the same max-width but different padding end up
+   different widths — header and masthead visibly failing to line up.
+   Bands that wrap an -inner (.cam-footer) therefore take vertical
+   padding only; the gutter belongs to the container, once. */
 
 /* Author rules with equal-or-higher specificity than the UA stylesheet's
    [hidden] can win and make a hidden element visible again — .cam-btn's
@@ -107,11 +121,8 @@ a:hover { color: var(--cam-teal-ink); }
 }
 
 .cam-header-inner {
-  /* width:min()+margin:auto, not max-width+padding: with border-box,
-     padding would eat into the content area at the clamp point instead
-     of the gutter, narrowing the nav on wide viewports. */
-  width: min(76rem, calc(100% - 3rem));
-  margin: 0 auto;
+  width: min(var(--cam-width-page), calc(100% - 2 * var(--cam-gutter)));
+  margin-inline: auto;
   padding: 0.85rem 0;
   display: flex;
   flex-wrap: wrap;
@@ -174,9 +185,9 @@ a:hover { color: var(--cam-teal-ink); }
 }
 
 .cam-masthead-inner {
-  max-width: 76rem;
-  margin: 0 auto;
-  padding: 1.05rem 1.5rem 0.95rem;
+  width: min(var(--cam-width-page), calc(100% - 2 * var(--cam-gutter)));
+  margin-inline: auto;
+  padding: 1.05rem 0 0.95rem;
   display: flex;
   align-items: center;
   gap: 0.9rem;
@@ -208,9 +219,9 @@ a:hover { color: var(--cam-teal-ink); }
 }
 
 .cam-hero-inner {
-  max-width: 60rem;
-  margin: 0 auto;
-  padding: 3.1rem 1.5rem 3.3rem;
+  width: min(var(--cam-width-wide), calc(100% - 2 * var(--cam-gutter)));
+  margin-inline: auto;
+  padding: 3.1rem 0 3.3rem;
 }
 
 .cam-hero h1 {
@@ -384,16 +395,25 @@ a:hover { color: var(--cam-teal-ink); }
    ------------------------------------------------------------------- */
 
 .cam-muted { color: var(--cam-muted); }
-.cam-container { max-width: 40rem; margin: 0 auto; padding: 0 1.25rem; }
-.cam-container-wide { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
+.cam-container {
+  width: min(var(--cam-width-text), calc(100% - 2 * var(--cam-gutter)));
+  margin-inline: auto;
+}
+
+.cam-container-wide {
+  width: min(var(--cam-width-wide), calc(100% - 2 * var(--cam-gutter)));
+  margin-inline: auto;
+}
 
 /* ---------------------------------------------------------------------
    Prose — long-form content. Apply to a wrapping element; it styles its
    own children rather than requiring a class on each one.
    ------------------------------------------------------------------- */
 
+/* max-width, not the container formula: prose is a reading measure inside
+   a container that already carries the gutter, and stays left-aligned. */
 .cam-prose {
-  max-width: 40rem;
+  max-width: var(--cam-width-text);
   font-size: 1.02rem;
   line-height: 1.65;
 }
@@ -440,15 +460,15 @@ a:hover { color: var(--cam-teal-ink); }
 
 .cam-footer {
   margin-top: 3rem;
-  padding: 2rem 1.5rem;
+  padding: 2rem 0;
   border-top: 1px solid var(--cam-line);
   color: var(--cam-muted);
   font-size: 0.88rem;
 }
 
 .cam-footer-inner {
-  max-width: 76rem;
-  margin: 0 auto;
+  width: min(var(--cam-width-page), calc(100% - 2 * var(--cam-gutter)));
+  margin-inline: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

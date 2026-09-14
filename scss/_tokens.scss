@@ -23,6 +23,10 @@ $cam-chart-compute: #8f2bbc;
 $cam-chart-empty: #dbe3e7;
 $cam-font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
 $cam-font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+$cam-gutter: 1.5rem;
+$cam-width-page: 76rem;
+$cam-width-wide: 60rem;
+$cam-width-text: 40rem;
 $cam-radius-sm: 3px;
 $cam-radius-md: 4px;
 $cam-radius-pill: 999px;
@@ -50,5 +54,9 @@ $btn-border-radius:       $cam-radius-pill;
 $btn-border-radius-sm:    $cam-radius-pill;
 $btn-border-radius-lg:    $cam-radius-pill;
 $focus-ring-color:        rgba($cam-focus, 0.35);
+// One gutter across both flavours: Bootstrap's .container picks this up,
+// the vanilla build's containers read --cam-gutter.
+$container-padding-x:     $cam-gutter;
+$grid-gutter-width:       $cam-gutter * 2;
 $enable-negative-margins: true;
 

@@ -56,6 +56,10 @@ scssLines.push("$btn-border-radius:       $cam-radius-pill;");
 scssLines.push("$btn-border-radius-sm:    $cam-radius-pill;");
 scssLines.push("$btn-border-radius-lg:    $cam-radius-pill;");
 scssLines.push("$focus-ring-color:        rgba($cam-focus, 0.35);");
+scssLines.push("// One gutter across both flavours: Bootstrap's .container picks this up,");
+scssLines.push("// the vanilla build's containers read --cam-gutter.");
+scssLines.push("$container-padding-x:     $cam-gutter;");
+scssLines.push("$grid-gutter-width:       $cam-gutter * 2;");
 scssLines.push("$enable-negative-margins: true;");
 scssLines.push("");
 fs.writeFileSync(

@@ -97,10 +97,24 @@
   a { color: #fff; }
 }
 
+// Centred containers, same names and same geometry as the framework-agnostic
+// build, so a page ported between the two flavours doesn't shift. Bootstrap's
+// own .container-* stay available and share the gutter via $container-padding-x;
+// these add the two widths Bootstrap has no breakpoint for.
+.cam-container {
+  width: min($cam-width-text, calc(100% - 2 * $cam-gutter));
+  margin-inline: auto;
+}
+
+.cam-container-wide {
+  width: min($cam-width-wide, calc(100% - 2 * $cam-gutter));
+  margin-inline: auto;
+}
+
 // Long-form content. Apply to a wrapping element; it styles its own children.
 
 .cam-prose {
-  max-width: 40rem;
+  max-width: $cam-width-text;
   font-size: 1.02rem;
   line-height: 1.65;
 

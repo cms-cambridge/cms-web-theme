@@ -11,7 +11,8 @@
 <link rel="stylesheet" href="../dist/cambridge-theme.css">
 <style>
   /* Doc-page-only styling, not part of the shipped theme. */
-  .doc-section { max-width: 64rem; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  /* Same container formula as the theme's own (see cambridge-tokens.css). */
+  .doc-section { width: min(64rem, calc(100% - 2 * var(--cam-gutter))); margin-inline: auto; padding: 2.5rem 0; }
   .doc-section + .doc-section { border-top: 1px solid var(--cam-line); }
   .doc-section h2 { margin-top: 0; }
   .doc-lede { color: var(--cam-muted); max-width: 42em; }
@@ -221,11 +222,22 @@
   <p class="doc-lede">
     Two faces, per the brand guidelines: <strong>Open Sans</strong> for body
     text and UI chrome, <strong>Source Serif 4</strong> for headings and the
-    wordmark. Source Serif 4 stands in for Feijoa — the guideline's actual
-    display serif — which is a commercial Klim Type Foundry face with no
-    free web-embeddable licence. If your organisation has a Feijoa licence,
-    swap <code>--cam-font-serif</code> and you're done; nothing else
-    references the face by name.
+    wordmark. Source Serif 4 stands in for Feijoa — the guidelines' actual
+    display serif — a commercial face from the
+    <a href="https://klim.co.nz/fonts/feijoa/">Klim Type Foundry</a>.
+  </p>
+  <p class="doc-lede">
+    The University does license Feijoa for staff: the
+    <a href="https://www.cam.ac.uk/brand-resources/guidelines/typography">typography
+    guidance</a> points at the downloads under
+    <a href="https://www.cam.ac.uk/brand-resources">brand resources</a>, and
+    Managed Devices usually have it already. There's no public licence
+    document to link — the terms come with the download. Note that a licence
+    to use a font on your machine isn't necessarily a licence to serve it as
+    a webfont, so check the terms (and with the brand team) before putting
+    Feijoa on a public site. Cleared? Swap
+    <code>--cam-font-serif</code>, add your own <code>@font-face</code>, and
+    you're done; nothing else references the face by name.
   </p>
   <pre class="code">&lt;link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&amp;display=swap" rel="stylesheet"&gt;</pre>
   <h1 style="margin-top:1.5rem;">Heading — Source Serif 4, 600</h1>
@@ -272,13 +284,13 @@
     page, a project site. See <code>examples/content-page.html</code>.
   </p>
   <div class="cam-masthead" style="border:1px solid var(--cam-line); margin: 1rem 0 0;">
-    <div style="max-width:none; padding: 0.85rem 1.25rem; display:flex; align-items:center; gap:0.9rem;">
+    <div style="max-width:none; padding: 0.85rem 1.5rem; display:flex; align-items:center; gap:0.9rem;">
       <a class="cam-masthead-id" href="#">Your Group Name</a>
       <span class="cam-masthead-unit">Department, University of Cambridge</span>
     </div>
   </div>
   <div class="cam-hero cam-hero-deep" style="margin: 0 0 1rem;">
-    <div style="max-width:none; padding: 2rem 1.25rem;">
+    <div style="max-width:none; padding: 2rem 1.5rem;">
       <h1 style="font-size:1.8rem;">What this page introduces</h1>
       <p>A line under the title, same as the masthead pairs above it.</p>
     </div>

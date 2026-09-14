@@ -783,7 +783,7 @@ progress {
 }
 
 .row {
-  --bs-gutter-x: 1.5rem;
+  --bs-gutter-x: 3rem;
   --bs-gutter-y: 0;
   display: flex;
   flex-wrap: wrap;
@@ -4313,7 +4313,7 @@ textarea.form-control-lg {
   --bs-card-color: ;
   --bs-card-bg: var(--bs-body-bg);
   --bs-card-img-overlay-padding: 1rem;
-  --bs-card-group-margin: 0.75rem;
+  --bs-card-group-margin: 1.5rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12668,6 +12668,16 @@ textarea.form-control-lg {
 }
 .cam-hero-deep a {
   color: #fff;
+}
+
+.cam-container {
+  width: min(40rem, 100% - 3rem);
+  margin-inline: auto;
+}
+
+.cam-container-wide {
+  width: min(60rem, 100% - 3rem);
+  margin-inline: auto;
 }
 
 .cam-prose {
