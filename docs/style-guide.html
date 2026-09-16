@@ -19,9 +19,10 @@
   .doc-section + .doc-section { border-top: 1px solid var(--cam-line); }
   .doc-section h2 { margin-top: 0; }
   .doc-lede { color: var(--cam-muted); }
-  /* alt="" on the <img>: the link's own text already names the page, so the
-     mark is decorative here and a second label would just be read twice. */
-  .cam-brand-link { display: inline-flex; align-items: center; gap: 0.55rem; }
+  /* The mark links out to the Centre's site; the wordmark beside it links to
+     the top of this page. Two destinations, so two links, not one wrapping
+     both -- and the mark carries real alt text rather than alt="". */
+  .doc-home { display: inline-flex; align-items: center; margin-right: -0.8rem; }
   .doc-mark { height: 1.5em; width: auto; }
   .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; margin: 1.25rem 0; }
   .swatch { border: 1px solid var(--cam-line); border-radius: var(--cam-radius-md); overflow: hidden; }
@@ -45,10 +46,10 @@
 
 <header class="cam-header">
   <div class="cam-header-inner">
-    <a class="cam-brand-link" href="#top">
-      <img src="../assets/cms-mark.svg" alt="" class="doc-mark" width="47" height="22">
-      cms-web-theme
+    <a class="doc-home" href="https://centre-for-music-and-science.github.io/">
+      <img src="../assets/cms-mark.svg" alt="Centre for Music and Science" class="doc-mark" width="47" height="22">
     </a>
+    <a class="cam-brand-link" href="#top">cms-web-theme</a>
     <a class="cam-nav-link" href="https://github.com/cms-cambridge/cms-web-theme">GitHub</a>
     <a class="cam-nav-link" href="../examples/bootstrap-example.html">Bootstrap example</a>
     <a class="cam-nav-link" href="../examples/vanilla-example.html">Vanilla example</a>
@@ -57,7 +58,7 @@
 </header>
 
 <div class="doc-section" id="top">
-  <h1><em class="cam-brand">Cambridge web theme</em></h1>
+  <h1>Cambridge web theme</h1>
   <p class="doc-lede">
     A shared visual identity for internally hosted services — the colour,
     type and component styling worked out on <a href="https://github.com/cms-cambridge/mf-service">mf-service</a>,
