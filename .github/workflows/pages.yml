@@ -31,13 +31,25 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -r css dist docs examples tokens README.md LICENSE _site/
+          cp -r assets css dist docs examples tokens README.md LICENSE _site/
           cp docs/style-guide.html _site/index.html
+          # index.html is style-guide.html moved up one level, so every ../ path
+          # in it has to lose that hop. src= as well as href=: the header mark is
+          # an <img>, and a missing rule here is a silent 404 on the live site.
           sed -i \
             -e 's#href="\.\./css/#href="css/#g' \
             -e 's#href="\.\./dist/#href="dist/#g' \
             -e 's#href="\.\./examples/#href="examples/#g' \
+            -e 's#href="\.\./assets/#href="assets/#g' \
+            -e 's#src="\.\./assets/#src="assets/#g' \
             _site/index.html
+
+      - name: Check index.html has no unrewritten ../ paths
+        run: |
+          if grep -n '\(href\|src\)="\.\./' _site/index.html; then
+            echo "::error::_site/index.html still references ../ after rewriting - these 404 on Pages"
+            exit 1
+          fi
 
       - uses: actions/upload-pages-artifact@v3
         with:
