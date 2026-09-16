@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cambridge web theme — style guide</title>
+<link rel="icon" href="cms-icon.svg" type="image/svg+xml">
+<!-- PNG fallback: Safari and older browsers don't take SVG favicons. -->
+<link rel="icon" href="cms-icon.png" sizes="64x64" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&display=swap" rel="stylesheet">
@@ -16,6 +19,10 @@
   .doc-section + .doc-section { border-top: 1px solid var(--cam-line); }
   .doc-section h2 { margin-top: 0; }
   .doc-lede { color: var(--cam-muted); }
+  /* alt="" on the <img>: the link's own text already names the page, so the
+     mark is decorative here and a second label would just be read twice. */
+  .cam-brand-link { display: inline-flex; align-items: center; gap: 0.55rem; }
+  .doc-mark { height: 1.5em; width: auto; }
   .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; margin: 1.25rem 0; }
   .swatch { border: 1px solid var(--cam-line); border-radius: var(--cam-radius-md); overflow: hidden; }
   .swatch-color { height: 4.5rem; }
@@ -38,7 +45,10 @@
 
 <header class="cam-header">
   <div class="cam-header-inner">
-    <a class="cam-brand-link" href="#top">cms-web-theme</a>
+    <a class="cam-brand-link" href="#top">
+      <img src="cms-mark.svg" alt="" class="doc-mark" width="47" height="22">
+      cms-web-theme
+    </a>
     <a class="cam-nav-link" href="https://github.com/cms-cambridge/cms-web-theme">GitHub</a>
     <a class="cam-nav-link" href="../examples/bootstrap-example.html">Bootstrap example</a>
     <a class="cam-nav-link" href="../examples/vanilla-example.html">Vanilla example</a>
