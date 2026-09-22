@@ -12615,7 +12615,7 @@ textarea.form-control-lg {
   color: #133844;
 }
 
-.cam-float {
+.cam-modal {
   width: min(30rem, 100% - 3rem);
   max-height: calc(100vh - 4rem);
   overflow: auto;
@@ -12628,13 +12628,13 @@ textarea.form-control-lg {
   border-radius: 4px;
   box-shadow: 0 22px 54px rgba(12, 38, 46, 0.24), 0 2px 6px rgba(12, 38, 46, 0.1);
 }
-.cam-float::backdrop {
+.cam-modal::backdrop {
   background: var(--cam-overlay, rgba(19, 56, 68, 0.24));
   backdrop-filter: blur(var(--cam-overlay-blur, 6px));
   -webkit-backdrop-filter: blur(var(--cam-overlay-blur, 6px));
 }
 
-.cam-float-backdrop {
+.cam-modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 1055;
@@ -12646,14 +12646,14 @@ textarea.form-control-lg {
   -webkit-backdrop-filter: blur(6px);
 }
 
-.cam-float-head {
+.cam-modal-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
 }
 
-.cam-float-kicker {
+.cam-modal-kicker {
   margin: 0 0 0.4rem;
   font-size: 0.75rem;
   font-weight: 600;
@@ -12662,7 +12662,7 @@ textarea.form-control-lg {
   letter-spacing: 0.06em;
 }
 
-.cam-float-title {
+.cam-modal-title {
   margin: 0;
   font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
   font-size: 1.6rem;
@@ -12672,7 +12672,7 @@ textarea.form-control-lg {
   color: #133844;
 }
 
-.cam-float-close {
+.cam-modal-close {
   flex: none;
   width: 2.75rem;
   height: 2.75rem;
@@ -12685,32 +12685,32 @@ textarea.form-control-lg {
   border-radius: 3px;
   color: #526b77;
 }
-.cam-float-close:hover {
+.cam-modal-close:hover {
   background: #eef1f3;
   color: #133844;
 }
-.cam-float-close:focus-visible {
+.cam-modal-close:focus-visible {
   outline: 2px solid #133844;
   outline-offset: 2px;
 }
-.cam-float-close svg {
+.cam-modal-close svg {
   width: 0.95rem;
   height: 0.95rem;
 }
 
-.cam-float-lede {
+.cam-modal-lede {
   margin: 0.95rem 0 0;
   font-size: 0.97rem;
   line-height: 1.6;
 }
 
-.cam-float-steps {
+.cam-modal-steps {
   margin: 1.25rem 0 0;
   padding: 0;
   list-style: none;
 }
 
-.cam-float-step {
+.cam-modal-step {
   display: flex;
   align-items: flex-start;
   gap: 0.8rem;
@@ -12720,11 +12720,11 @@ textarea.form-control-lg {
   line-height: 1.5;
   color: #526b77;
 }
-.cam-float-step:last-child {
+.cam-modal-step:last-child {
   border-bottom: 1px solid #dfe4e7;
 }
 
-.cam-float-step-mark {
+.cam-modal-step-mark {
   flex: none;
   width: 1.375rem;
   height: 1.375rem;
@@ -12738,7 +12738,7 @@ textarea.form-control-lg {
   color: #00666b;
 }
 
-.cam-float-actions {
+.cam-modal-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12747,7 +12747,7 @@ textarea.form-control-lg {
   margin-top: 1.4rem;
 }
 
-.cam-float-opt {
+.cam-modal-opt {
   display: flex;
   align-items: center;
   gap: 0.55rem;
@@ -12755,27 +12755,27 @@ textarea.form-control-lg {
   color: #526b77;
   cursor: pointer;
 }
-.cam-float-opt .form-check-input {
+.cam-modal-opt .form-check-input {
   margin: 0;
   flex-shrink: 0;
 }
 
 @media (max-width: 30rem) {
-  .cam-float {
+  .cam-modal {
     padding: 1.5rem 1.4rem 1.4rem;
   }
-  .cam-float-title {
+  .cam-modal-title {
     font-size: 1.35rem;
   }
-  .cam-float-actions {
+  .cam-modal-actions {
     flex-direction: column;
     align-items: stretch;
     gap: 0.9rem;
   }
-  .cam-float-actions .btn {
+  .cam-modal-actions .btn {
     width: 100%;
   }
-  .cam-float-opt {
+  .cam-modal-opt {
     justify-content: center;
   }
 }

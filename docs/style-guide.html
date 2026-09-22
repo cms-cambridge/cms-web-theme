@@ -368,7 +368,7 @@
     </div>
   </div>
 
-  <h3>Float</h3>
+  <h3>Modal</h3>
   <p class="doc-lede">
     One panel over a blurred page — a welcome box, a first-run explainer,
     a short confirm. Built on <code>&lt;dialog&gt;</code> and
@@ -380,36 +380,37 @@
     <code>.form-check-input</code> under Bootstrap).
   </p>
   <div class="demo-row">
-    <button type="button" class="cam-btn" id="float-demo-open">Open the float</button>
+    <button type="button" class="cam-btn" id="modal-demo-open">Open the modal</button>
   </div>
   <div class="do">
     <strong>Do</strong> put <code>autofocus</code> on the primary button.
     Without it <code>showModal()</code> focuses the first tabbable thing in
-    the box, which is the close ✕, so the float opens with a focus ring on
+    the box, which is the close ✕, so the modal opens with a focus ring on
     "dismiss" and none on the action it exists to offer.
   </div>
   <div class="dont">
     <strong>Don't</strong> reach for it for a form, a settings panel, or a
-    second level of navigation. A float interrupts, so it has to be worth
+    second level of navigation. A modal interrupts, so it has to be worth
     the interruption and short enough to read standing up. Bootstrap's own
-    <code>.modal</code> is the better answer when you want its JS API or its
-    full-width sheet on small screens.
+    <code>.modal</code> — the framework's, not this one — is the better
+    answer when you want its JS API or its full-width sheet on small
+    screens.
   </div>
-<pre class="code">&lt;dialog class="cam-float" aria-labelledby="welcome-title"&gt;
-  &lt;div class="cam-float-head"&gt;
+<pre class="code">&lt;dialog class="cam-modal" aria-labelledby="welcome-title"&gt;
+  &lt;div class="cam-modal-head"&gt;
     &lt;div&gt;
-      &lt;p class="cam-float-kicker"&gt;Welcome&lt;/p&gt;
-      &lt;h2 class="cam-float-title" id="welcome-title"&gt;Welcome to &lt;em class="cam-brand"&gt;Example Service&lt;/em&gt;&lt;/h2&gt;
+      &lt;p class="cam-modal-kicker"&gt;Welcome&lt;/p&gt;
+      &lt;h2 class="cam-modal-title" id="welcome-title"&gt;Welcome to &lt;em class="cam-brand"&gt;Example Service&lt;/em&gt;&lt;/h2&gt;
     &lt;/div&gt;
-    &lt;button type="button" class="cam-float-close" aria-label="Close"&gt;&lt;svg …&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;button type="button" class="cam-modal-close" aria-label="Close"&gt;&lt;svg …&gt;&lt;/svg&gt;&lt;/button&gt;
   &lt;/div&gt;
-  &lt;p class="cam-float-lede"&gt;One sentence on what this page is for.&lt;/p&gt;
-  &lt;ol class="cam-float-steps"&gt;
-    &lt;li class="cam-float-step"&gt;&lt;span class="cam-float-step-mark"&gt;1&lt;/span&gt;&lt;span&gt;First thing.&lt;/span&gt;&lt;/li&gt;
+  &lt;p class="cam-modal-lede"&gt;One sentence on what this page is for.&lt;/p&gt;
+  &lt;ol class="cam-modal-steps"&gt;
+    &lt;li class="cam-modal-step"&gt;&lt;span class="cam-modal-step-mark"&gt;1&lt;/span&gt;&lt;span&gt;First thing.&lt;/span&gt;&lt;/li&gt;
   &lt;/ol&gt;
-  &lt;div class="cam-float-actions"&gt;
+  &lt;div class="cam-modal-actions"&gt;
     &lt;button type="button" class="cam-btn" autofocus&gt;Get started&lt;/button&gt;
-    &lt;label class="cam-float-opt"&gt;&lt;input type="checkbox"&gt; Don't show this again&lt;/label&gt;
+    &lt;label class="cam-modal-opt"&gt;&lt;input type="checkbox"&gt; Don't show this again&lt;/label&gt;
   &lt;/div&gt;
 &lt;/dialog&gt;
 
@@ -417,28 +418,28 @@ el.showModal();   // not el.show() — that opens it with no backdrop,
                   // no focus trap and no inert page, so the blur
                   // silently never appears.</pre>
 
-  <dialog class="cam-float" id="float-demo" aria-labelledby="float-demo-title">
-    <div class="cam-float-head">
+  <dialog class="cam-modal" id="modal-demo" aria-labelledby="modal-demo-title">
+    <div class="cam-modal-head">
       <div>
-        <p class="cam-float-kicker">Welcome</p>
-        <h2 class="cam-float-title" id="float-demo-title">Welcome to <em class="cam-brand">Example Service</em></h2>
+        <p class="cam-modal-kicker">Welcome</p>
+        <h2 class="cam-modal-title" id="modal-demo-title">Welcome to <em class="cam-brand">Example Service</em></h2>
       </div>
-      <button type="button" class="cam-float-close" id="float-demo-close" aria-label="Close">
+      <button type="button" class="cam-modal-close" id="modal-demo-close" aria-label="Close">
         <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M3.2 3.2 12.8 12.8M12.8 3.2 3.2 12.8"/></svg>
       </button>
     </div>
-    <p class="cam-float-lede">
+    <p class="cam-modal-lede">
       One or two sentences on what this page is for, and anything the
       reader needs to know before they start.
     </p>
-    <ol class="cam-float-steps">
-      <li class="cam-float-step"><span class="cam-float-step-mark">1</span><span>The first thing the reader has to do.</span></li>
-      <li class="cam-float-step"><span class="cam-float-step-mark">2</span><span>The second thing, and any choices it involves.</span></li>
-      <li class="cam-float-step"><span class="cam-float-step-mark">3</span><span>What they get at the end.</span></li>
+    <ol class="cam-modal-steps">
+      <li class="cam-modal-step"><span class="cam-modal-step-mark">1</span><span>The first thing the reader has to do.</span></li>
+      <li class="cam-modal-step"><span class="cam-modal-step-mark">2</span><span>The second thing, and any choices it involves.</span></li>
+      <li class="cam-modal-step"><span class="cam-modal-step-mark">3</span><span>What they get at the end.</span></li>
     </ol>
-    <div class="cam-float-actions">
-      <button type="button" class="cam-btn" id="float-demo-go" autofocus>Get started</button>
-      <label class="cam-float-opt"><input type="checkbox"> Don't show this again</label>
+    <div class="cam-modal-actions">
+      <button type="button" class="cam-btn" id="modal-demo-go" autofocus>Get started</button>
+      <label class="cam-modal-opt"><input type="checkbox"> Don't show this again</label>
     </div>
   </dialog>
 
@@ -525,18 +526,18 @@ el.showModal();   // not el.show() — that opens it with no backdrop,
 </div>
 
 <script>
-  // Doc-page-only: drives the float demo above. The theme itself ships no
-  // JavaScript — .cam-float is CSS over the browser's own <dialog>.
+  // Doc-page-only: drives the modal demo above. The theme itself ships no
+  // JavaScript — .cam-modal is CSS over the browser's own <dialog>.
   (function () {
-    var dialog = document.getElementById('float-demo');
+    var dialog = document.getElementById('modal-demo');
     if (!dialog || typeof dialog.showModal !== 'function') return;
-    document.getElementById('float-demo-open').addEventListener('click', function () {
+    document.getElementById('modal-demo-open').addEventListener('click', function () {
       dialog.showModal();
     });
-    document.getElementById('float-demo-close').addEventListener('click', function () {
+    document.getElementById('modal-demo-close').addEventListener('click', function () {
       dialog.close();
     });
-    document.getElementById('float-demo-go').addEventListener('click', function () {
+    document.getElementById('modal-demo-go').addEventListener('click', function () {
       dialog.close();
     });
   })();
