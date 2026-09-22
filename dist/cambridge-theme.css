@@ -12615,6 +12615,170 @@ textarea.form-control-lg {
   color: #133844;
 }
 
+.cam-float {
+  width: min(30rem, 100% - 3rem);
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  margin: auto;
+  padding: 2rem 2.25rem 1.75rem;
+  background: #ffffff;
+  color: #133844;
+  border: 1px solid #dfe4e7;
+  border-top: 3px solid #00bdb6;
+  border-radius: 4px;
+  box-shadow: 0 22px 54px rgba(12, 38, 46, 0.24), 0 2px 6px rgba(12, 38, 46, 0.1);
+}
+.cam-float::backdrop {
+  background: var(--cam-overlay, rgba(19, 56, 68, 0.24));
+  backdrop-filter: blur(var(--cam-overlay-blur, 6px));
+  -webkit-backdrop-filter: blur(var(--cam-overlay-blur, 6px));
+}
+
+.cam-float-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1055;
+  display: grid;
+  place-items: center;
+  padding: 2rem 0;
+  background: rgba(19, 56, 68, 0.24);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.cam-float-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cam-float-kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #526b77;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cam-float-title {
+  margin: 0;
+  font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #133844;
+}
+
+.cam-float-close {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -0.75rem -0.95rem -0.75rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  border-radius: 3px;
+  color: #526b77;
+}
+.cam-float-close:hover {
+  background: #eef1f3;
+  color: #133844;
+}
+.cam-float-close:focus-visible {
+  outline: 2px solid #133844;
+  outline-offset: 2px;
+}
+.cam-float-close svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.cam-float-lede {
+  margin: 0.95rem 0 0;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+.cam-float-steps {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cam-float-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid #dfe4e7;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #526b77;
+}
+.cam-float-step:last-child {
+  border-bottom: 1px solid #dfe4e7;
+}
+
+.cam-float-step-mark {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef1f3;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #00666b;
+}
+
+.cam-float-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 1.4rem;
+}
+
+.cam-float-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.84rem;
+  color: #526b77;
+  cursor: pointer;
+}
+.cam-float-opt .form-check-input {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 30rem) {
+  .cam-float {
+    padding: 1.5rem 1.4rem 1.4rem;
+  }
+  .cam-float-title {
+    font-size: 1.35rem;
+  }
+  .cam-float-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+  }
+  .cam-float-actions .btn {
+    width: 100%;
+  }
+  .cam-float-opt {
+    justify-content: center;
+  }
+}
 .cam-masthead {
   background: #ffffff;
 }

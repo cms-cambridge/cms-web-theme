@@ -42,6 +42,191 @@
   color: $cam-ink;
 }
 
+// One panel over a blurred page — a welcome box, a first-run explainer, a
+// short confirm. Built on <dialog> + showModal() so the browser supplies
+// the top layer, the focus trap, the inert page, Escape to close and
+// ::backdrop; Bootstrap's own .modal stays the right answer when you want
+// its JS API, its stacking or its full-width sheet on small screens. Same
+// class names as the framework-agnostic build, so a page ported between
+// the two flavours doesn't shift. The markup, and why the primary button
+// takes autofocus, are documented in css/cambridge-tokens.css.
+
+.cam-float {
+  width: min(30rem, calc(100% - 2 * $cam-gutter));
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  margin: auto;
+  padding: 2rem 2.25rem 1.75rem;
+  background: $cam-surface;
+  color: $cam-ink;
+  // The same 3px teal rule .navbar-cambridge and .cam-masthead-id carry.
+  border: 1px solid $cam-line;
+  border-top: 3px solid $cam-teal;
+  border-radius: $cam-radius-md;
+  box-shadow: $cam-shadow-float;
+
+  // var(…, <literal>) on purpose: ::backdrop inherited from nothing at all
+  // until 2023, so on an older engine the literal is what paints.
+  &::backdrop {
+    background: var(--cam-overlay, #{$cam-overlay});
+    backdrop-filter: blur(var(--cam-overlay-blur, #{$cam-overlay-blur}));
+    -webkit-backdrop-filter: blur(var(--cam-overlay-blur, #{$cam-overlay-blur}));
+  }
+}
+
+// For pages without <dialog>, or where the box is part of the page's own
+// flow. The keyboard behaviour is then yours to write.
+.cam-float-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $zindex-modal;
+  display: grid;
+  place-items: center;
+  padding: 2rem 0;
+  background: $cam-overlay;
+  backdrop-filter: blur($cam-overlay-blur);
+  -webkit-backdrop-filter: blur($cam-overlay-blur);
+}
+
+.cam-float-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+// Wider tracking than a table header's: this is a single word on its own
+// above a serif line, not a column of repeated labels.
+.cam-float-kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $cam-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+// An explicit class, not a bare h2: an app that restyles h2 for its own
+// purposes would otherwise flatten the float's title without touching
+// this file.
+.cam-float-title {
+  margin: 0;
+  font-family: $cam-font-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: $cam-ink;
+}
+
+// 2.75rem = the 44px pointer target, pulled back out of the padding by the
+// negative margins so the glyph still lines up with the box's corner.
+.cam-float-close {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -0.75rem -0.95rem -0.75rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  border-radius: $cam-radius-sm;
+  color: $cam-muted;
+
+  &:hover {
+    background: $cam-fill;
+    color: $cam-ink;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $cam-focus;
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+}
+
+.cam-float-lede {
+  margin: 0.95rem 0 0;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+.cam-float-steps {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cam-float-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid $cam-line;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: $cam-muted;
+
+  &:last-child { border-bottom: 1px solid $cam-line; }
+}
+
+.cam-float-step-mark {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $cam-fill;
+  border-radius: $cam-radius-sm;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $cam-teal-ink;
+}
+
+.cam-float-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 1.4rem;
+}
+
+// Bootstrap's .form-check-input is the checkbox here, so only the row's
+// own layout needs stating.
+.cam-float-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.84rem;
+  color: $cam-muted;
+  cursor: pointer;
+
+  .form-check-input { margin: 0; flex-shrink: 0; }
+}
+
+// At phone width the two halves of .cam-float-actions can't sit side by
+// side without the button shrinking below a comfortable target.
+@media (max-width: 30rem) {
+  .cam-float { padding: 1.5rem 1.4rem 1.4rem; }
+  .cam-float-title { font-size: 1.35rem; }
+
+  .cam-float-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+  }
+
+  .cam-float-actions .btn { width: 100%; }
+  .cam-float-opt { justify-content: center; }
+}
+
 // The content-page header: an identity band, then a title band. .navbar
 // (+ .navbar-cambridge above) stays the header for an app or tool.
 

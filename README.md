@@ -72,6 +72,9 @@ additions cover what Bootstrap has no variable for — see
 - `.navbar-cambridge` — the header accent rule + underline nav, add
   alongside `.navbar`
 - `.alert-cambridge` — a quiet status line (not a saturated `.alert-*`)
+- `.cam-float` — one panel over a blurred page, built on `<dialog>`;
+  Bootstrap's own `.modal` when you want its JS API or its full-width
+  sheet on small screens
 - `.badge-cam-info` / `-success` / `-warning` / `-accent` — categorical
   badges, AA-safe
 
@@ -95,8 +98,9 @@ If you're compiling from source instead of using the precompiled CSS:
 
 Use the `.cam-*` classes documented in the style guide — `.cam-header` or
 `.cam-masthead`/`.cam-hero` for the header, `.cam-btn`, `.cam-card`,
-`.cam-notice`, `.cam-table`, `.cam-badge-*`, `.cam-prose` for long-form
-content, `.cam-footer` — or just the `--cam-*` custom properties directly
+`.cam-notice`, `.cam-float` for a welcome or first-run panel,
+`.cam-table`, `.cam-badge-*`, `.cam-prose` for long-form content,
+`.cam-footer` — or just the `--cam-*` custom properties directly
 in your own CSS.
 
 ## What's in here
