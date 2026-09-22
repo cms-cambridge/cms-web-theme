@@ -22,6 +22,9 @@
   --cam-teal-ink: #00666b;
   --cam-danger: #d6083b;
   --cam-focus: #133844;
+  --cam-overlay: rgba(19, 56, 68, 0.24);
+  --cam-overlay-blur: 6px;
+  --cam-shadow-float: 0 22px 54px rgba(12, 38, 46, 0.24), 0 2px 6px rgba(12, 38, 46, 0.1);
   --cam-chart-anon: #0072cf;
   --cam-chart-github: #ea7125;
   --cam-chart-compute: #8f2bbc;
@@ -309,6 +312,273 @@ a:hover { color: var(--cam-teal-ink); }
 }
 
 .cam-card:hover { border-color: var(--cam-line-strong); }
+
+/* ---------------------------------------------------------------------
+   Float — one panel over a blurred page: a welcome box, a first-run
+   explainer, a short confirm. The page stays visible and out of focus
+   behind it, so the box reads as sitting on top of this page rather
+   than as a page of its own.
+
+   Built on <dialog> + dialog.showModal(), which is what makes it cheap
+   to use correctly: the browser puts the box in the top layer (no
+   z-index to lose), traps focus, makes the rest of the page inert,
+   closes on Escape, and gives us ::backdrop to blur through. A
+   div-and-z-index overlay has to reimplement all five by hand.
+
+     <dialog class="cam-float" aria-labelledby="welcome-title">
+       <div class="cam-float-head">
+         <div>
+           <p class="cam-float-kicker">Welcome</p>
+           <h2 class="cam-float-title" id="welcome-title">Welcome to <em class="cam-brand">melody-features</em></h2>
+         </div>
+         <button type="button" class="cam-float-close" aria-label="Close">
+           <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M3.2 3.2 12.8 12.8M12.8 3.2 3.2 12.8"/></svg>
+         </button>
+       </div>
+       <p class="cam-float-lede">One sentence on what this page is for.</p>
+       <ol class="cam-float-steps">
+         <li class="cam-float-step"><span class="cam-float-step-mark">1</span><span>First thing.</span></li>
+         <li class="cam-float-step"><span class="cam-float-step-mark">2</span><span>Second thing.</span></li>
+       </ol>
+       <div class="cam-float-actions">
+         <button type="button" class="cam-btn" autofocus>Get started</button>
+         <label class="cam-float-opt"><input type="checkbox"> Don't show this again</label>
+       </div>
+     </dialog>
+
+   Open it with el.showModal(), not el.show() — show() opens it without
+   the backdrop, the focus trap or the inert page, so the blur silently
+   never appears. .cam-float-close and .cam-btn above are plain buttons;
+   wire either to el.close(). The autofocus on the primary button is
+   deliberate: without it showModal() focuses the first tabbable thing
+   in the box, which is the close X, so the float opens with a focus
+   ring on "dismiss" and the action it exists to offer unringed.
+
+   No <dialog> (or the box is part of the page's own flow, e.g. a
+   server-rendered first-run screen): wrap a plain element in
+   .cam-float-backdrop instead, which paints the same tint and blur,
+   and give that element role="dialog" and aria-modal="true" yourself.
+   The keyboard behaviour is then yours to write.
+
+   The steps list is optional — a float is just as often a kicker, a
+   title, a paragraph and one button. What a float is NOT is a place to
+   put a form, a settings panel or a second level of navigation: it
+   interrupts, so it has to be worth the interruption and short enough
+   to read standing up.
+   ------------------------------------------------------------------- */
+
+.cam-float {
+  width: min(30rem, calc(100% - 2 * var(--cam-gutter)));
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  /* margin:auto centres it against the UA's `position:fixed; inset:0`
+     on an open modal dialog; harmless in the .cam-float-backdrop case,
+     where the wrapper's grid does the centring. */
+  margin: auto;
+  padding: 2rem 2.25rem 1.75rem;
+  background: var(--cam-surface);
+  color: var(--cam-ink);
+  /* One teal edge, the same 3px rule .cam-header and .cam-masthead-id
+     carry — it's what marks the box as ours rather than as a generic
+     modal, and it costs no colour anywhere else in the panel. */
+  border: 1px solid var(--cam-line);
+  border-top: 3px solid var(--cam-teal);
+  border-radius: var(--cam-radius-md);
+  box-shadow: var(--cam-shadow-float);
+}
+
+/* var(…, <literal>) on purpose: ::backdrop inherited from nothing at
+   all until 2023, so on an older engine the custom property simply
+   isn't there and the literal is what paints. On a current one the
+   property inherits from :root and stays overridable. Keep the two in
+   step with --cam-overlay / --cam-overlay-blur in tokens.json. */
+.cam-float::backdrop {
+  background: var(--cam-overlay, rgba(19, 56, 68, 0.24));
+  backdrop-filter: blur(var(--cam-overlay-blur, 6px));
+  -webkit-backdrop-filter: blur(var(--cam-overlay-blur, 6px));
+}
+
+.cam-float-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 2rem 0;
+  background: var(--cam-overlay);
+  backdrop-filter: blur(var(--cam-overlay-blur));
+  -webkit-backdrop-filter: blur(var(--cam-overlay-blur));
+}
+
+.cam-float-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Wider tracking than .cam-table th's 0.03em: that one heads a column
+   of repeated labels, this is a single word on its own above a serif
+   line and needs the extra air to read as a label at all. */
+.cam-float-kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cam-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* An explicit class, not a bare h2: an app that restyles h2 for its own
+   purposes (mf-service turns it into a small sans kicker) would
+   otherwise flatten the float's title without touching this file. */
+.cam-float-title {
+  margin: 0;
+  font-family: var(--cam-font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--cam-ink);
+}
+
+/* 2.75rem = the 44px pointer target, then pulled back out of the
+   padding by the negative margins so the glyph still lines up with the
+   box's top-right corner rather than sitting a finger's width inside
+   it. Shrinking the button instead is the usual way this gets broken. */
+.cam-float-close {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -0.75rem -0.95rem -0.75rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  border-radius: var(--cam-radius-sm);
+  color: var(--cam-muted);
+}
+
+.cam-float-close:hover {
+  background: var(--cam-fill);
+  color: var(--cam-ink);
+}
+
+.cam-float-close:focus-visible {
+  outline: 2px solid var(--cam-focus);
+  outline-offset: 2px;
+}
+
+.cam-float-close svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.cam-float-lede {
+  margin: 0.95rem 0 0;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+.cam-float-steps {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cam-float-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--cam-line);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--cam-muted);
+}
+
+.cam-float-step:last-child { border-bottom: 1px solid var(--cam-line); }
+
+.cam-float-step-mark {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cam-fill);
+  border-radius: var(--cam-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cam-teal-ink);
+}
+
+.cam-float-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 1.4rem;
+}
+
+.cam-float-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.84rem;
+  color: var(--cam-muted);
+  cursor: pointer;
+}
+
+/* The theme has no checkbox component, and the browser default sits
+   badly beside a pill button; this styles only the one inside a float's
+   opt-out. Lift it out if a .cam-check ever lands. */
+.cam-float-opt input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--cam-line-strong);
+  background: var(--cam-surface);
+  border-radius: var(--cam-radius-sm);
+  cursor: pointer;
+}
+
+.cam-float-opt input[type="checkbox"]:checked {
+  background: var(--cam-ink);
+  border-color: var(--cam-ink);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23fff' stroke-width='2' d='M3.5 8.5 6.5 11.5 12.5 4.5'/></svg>");
+  background-size: 11px 11px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cam-float-opt input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--cam-focus);
+  outline-offset: 2px;
+}
+
+/* The first media query in this file, and it earns its place: at phone
+   width the two halves of .cam-float-actions can't sit side by side
+   without the button shrinking below a comfortable target, so they
+   stack and the button takes the full measure. */
+@media (max-width: 30rem) {
+  .cam-float { padding: 1.5rem 1.4rem 1.4rem; }
+  .cam-float-title { font-size: 1.35rem; }
+
+  .cam-float-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+  }
+
+  .cam-float-actions .cam-btn { width: 100%; }
+  .cam-float-opt { justify-content: center; }
+}
 
 /* ---------------------------------------------------------------------
    Forms
