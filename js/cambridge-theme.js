@@ -1,31 +1,23 @@
 /*!
  * cms-web-theme — light/dark toggle. Optional: css/cambridge-tokens.css
- * follows the OS's dark-mode setting on its own; this adds a button that
- * overrides it, and remembers the override.
+ * follows the OS on its own; this adds a button that overrides it and
+ * remembers the choice.
  *
- * Load it in <head>, not at the end of <body>, and without defer/async:
- * the first half applies a saved choice before the page paints, which is
- * what stops a dark-mode user getting a white flash on every navigation.
- * It's small enough that blocking on it costs nothing.
+ * Load in <head>, without defer/async. The first half applies a saved choice
+ * before first paint, which avoids a white flash on every page load.
  *
  *   <script src="cms-web-theme/js/cambridge-theme.js"></script>
  *
- * What it does:
- *   - Reads the saved choice ("light" or "dark") and, if there is one, sets
- *     <html data-theme="…">. No saved choice means no attribute, so the OS
- *     setting keeps deciding — including changing under an open page.
- *   - Wires every [data-cam-theme-toggle] button (see .cam-theme-toggle in
- *     the CSS): a click saves and applies the opposite of what's showing.
- *   - Mirrors the effective theme to data-bs-theme, Bootstrap 5.3's own
- *     switch, which is what the Bootstrap build (dist/cambridge-theme.css)
- *     keys its dark mode on. Without this script, set data-bs-theme
- *     yourself; the Bootstrap build does not read the OS setting.
- *   - Fires a "cam-theme-change" event on document, detail { theme }, for
- *     anything of yours that needs to redraw (a canvas chart, say).
+ * - Saved choice ("light"/"dark") -> <html data-theme>. None saved -> no
+ *   attribute, so the OS keeps deciding, even if it changes while open.
+ * - Wires every [data-cam-theme-toggle] button (.cam-theme-toggle): a click
+ *   saves and applies the opposite of what's showing.
+ * - Mirrors the effective theme to data-bs-theme, which the Bootstrap build
+ *   keys on (it doesn't read the OS itself).
+ * - Fires "cam-theme-change" on document, detail { theme }.
  *
- * Storage is wrapped in try/catch throughout: it throws with cookies
- * blocked and in some private modes, and a theme toggle failing to
- * remember is not worth breaking the page over.
+ * Storage access is in try/catch: it throws with cookies blocked and in some
+ * private modes, and not remembering isn't worth breaking the page.
  */
 (function () {
   "use strict";
@@ -46,11 +38,10 @@
   function save(theme) {
     try {
       window.localStorage.setItem(KEY, theme);
-    } catch (e) { /* not remembered; still applied for this page view */ }
+    } catch (e) { /* applied for this page view, just not remembered */ }
   }
 
-  // What the page is actually showing: the explicit attribute if there is
-  // one, else the OS.
+  // What's showing: the attribute if set, else the OS.
   function effective() {
     var attr = root.getAttribute("data-theme");
     if (attr === "light" || attr === "dark") return attr;
@@ -102,7 +93,7 @@
     ready();
   }
 
-  // The OS setting changing matters only while the user hasn't chosen.
+  // An OS change only matters while nothing is saved.
   if (osDark) {
     var onOs = function () { sync(); };
     if (osDark.addEventListener) osDark.addEventListener("change", onOs);

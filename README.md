@@ -1,17 +1,13 @@
 # cms-web-theme
 
-A shared University of Cambridge–identity theme for anything hosted
-alongside [mf-service](https://github.com/cms-cambridge/mf-service): colour,
-type, and components for an app or tool (a form, a dashboard, an API's
-docs) *and* for an ordinary content page (a homepage, an about page, a
-project site) — worked out on mf-service, then broadened once it was
-clear "a site" covers more shapes than the one mf-service is.
+University of Cambridge–identity styling for services hosted alongside
+[mf-service](https://github.com/cms-cambridge/mf-service): colour, type and
+components for apps and tools, and for ordinary content pages. Ships as a
+Bootstrap 5 theme and as framework-agnostic CSS, from one token file.
 
-**This is not an official University design system** — see
-[Provenance](#provenance) before you rely on it for anything public-facing.
+**Not an official University design system** — see [Provenance](#provenance).
 
-Live style guide: `docs/style-guide.html` (open locally, or see the linked
-Artifact if one was shared with you).
+Style guide: `docs/style-guide.html`.
 
 ## Install
 
@@ -19,73 +15,51 @@ Artifact if one was shared with you).
 npm install github:cms-cambridge/cms-web-theme
 ```
 
-or just download `dist/cambridge-theme.css` / `css/cambridge-tokens.css` —
-there's no registry package yet, both are plain files you can vendor.
+Or vendor `dist/cambridge-theme.css` / `css/cambridge-tokens.css`: plain
+files, no registry package yet.
 
 ## Which header?
 
-Two compositions ship, because an app and a content page want different
-things from their header:
+- **`.cam-header`**: one row of wordmark, nav and actions. For a tool whose
+  header is pure navigation. What mf-service uses.
+- **`.cam-masthead` + `.cam-hero`**: an identity band, then a title band.
+  For a page with something to introduce (homepage, about page, project
+  site), modelled on [phy.cam.ac.uk](https://www.phy.cam.ac.uk/) and
+  [mus.cam.ac.uk](https://www.mus.cam.ac.uk/).
 
-- **`.cam-header`** — one row: wordmark, nav, actions. For a tool whose
-  header is pure navigation and the real content — a form, a dashboard —
-  starts right under it. This is what mf-service uses.
-- **`.cam-masthead` + `.cam-hero`** — an identity band, then a title band.
-  For a page that has something to introduce before its content: a
-  homepage, an about page, a project site. Modelled on how
-  [phy.cam.ac.uk](https://www.phy.cam.ac.uk/) and
-  [mus.cam.ac.uk](https://www.mus.cam.ac.uk/) open their own pages.
-
-Pick one per page, not both — see `examples/content-page.html` for the
-masthead+hero pattern and `examples/bootstrap-example.html` /
-`vanilla-example.html` for `.cam-header`.
+One per page. Working pages are in `examples/`; `./quickstart.sh` serves
+them.
 
 ## Quickstart
 
-If you just want to have a look at some examples using this theme, then use `quickstart.sh` like so:
+Pick one track. Both define `.cam-modal`, `.cam-hero` and others, and you
+don't need two copies of the tokens.
 
-```bash
-# run from repo root
-chmod +x quickstart.sh
-./quickstart.sh
-```
+### Bootstrap 5
 
-Pick one framework track. Don't load both `dist/cambridge-theme.css` and
-`css/cambridge-tokens.css` on the same page — the class names don't
-collide, but you don't need two copies of the same tokens.
-
-### Already using Bootstrap 5
-
-Link the precompiled build **instead of** `bootstrap.css`:
+Link the build **instead of** `bootstrap.css`:
 
 ```html
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="node_modules/cms-web-theme/dist/cambridge-theme.css">
 ```
 
-Every stock Bootstrap class (`.btn`, `.navbar`, `.card`, `.table`,
-`.form-control`, `.alert`…) already carries the palette. A handful of
-additions cover what Bootstrap has no variable for — see
-`scss/_components.scss` or the style guide:
+Stock Bootstrap classes already carry the palette. Additions for what
+Bootstrap has no variable for (`scss/_components.scss`):
 
-- `.cam-brand` — italic serif wordmark
-- `.navbar-cambridge` — the header accent rule + underline nav, add
-  alongside `.navbar`
-- `.alert-cambridge` — a quiet status line (not a saturated `.alert-*`)
-- `.cam-modal` — one panel over a blurred page, built on `<dialog>`;
-  Bootstrap's own `.modal` when you want its JS API or its full-width
-  sheet on small screens
-- `.badge-cam-info` / `-success` / `-warning` / `-accent` — categorical
-  badges, AA-safe
+- `.cam-brand`: italic serif wordmark
+- `.navbar-cambridge`: accent rule and underline nav, alongside `.navbar`
+- `.alert-cambridge`: a quiet status line
+- `.cam-modal`: one panel over a blurred page, on `<dialog>`. Bootstrap's
+  `.modal` is better when you want its JS API or a full-width sheet on
+  small screens.
+- `.badge-cam-info` / `-success` / `-warning` / `-accent`: AA-safe
+  categorical badges
+- `.cam-masthead`, `.cam-hero`, `.cam-hero-deep`, `.cam-prose`: content pages
 
-`.cam-masthead`, `.cam-hero`, `.cam-hero-deep`, `.cam-prose` and
-`.cam-footer` cover the content-page composition and long-form content;
-see the style guide for all of them together.
-
-If you're compiling from source instead of using the precompiled CSS:
+To compile from source:
 
 ```scss
-// your own entry .scss, before anything else
 @import "cms-web-theme/scss/cambridge-theme";
 ```
 
@@ -96,35 +70,26 @@ If you're compiling from source instead of using the precompiled CSS:
 <link rel="stylesheet" href="node_modules/cms-web-theme/css/cambridge-tokens.css">
 ```
 
-Use the `.cam-*` classes documented in the style guide — `.cam-header` or
-`.cam-masthead`/`.cam-hero` for the header, `.cam-btn`, `.cam-card`,
-`.cam-notice`, `.cam-modal` for a welcome or first-run panel,
-`.cam-table`, `.cam-badge-*`, `.cam-prose` for long-form content,
-`.cam-footer` — or just the `--cam-*` custom properties directly
-in your own CSS.
+Use the `.cam-*` classes in the style guide (`.cam-header`, `.cam-masthead`,
+`.cam-hero`, `.cam-btn`, `.cam-card`, `.cam-notice`, `.cam-modal`,
+`.cam-table`, `.cam-badge-*`, `.cam-prose`, `.cam-footer`), or just the
+`--cam-*` custom properties in your own CSS.
 
 ## What's in here
 
 ```
-tokens/tokens.json          single source of truth — colour, type, radii
-scripts/build-tokens.js     generates scss/_tokens.scss,
-                             scss/_properties.scss and the token blocks
-                             (light and dark) in css/cambridge-tokens.css
-scss/                       Bootstrap 5 build (source)
-css/cambridge-tokens.css    framework-agnostic build (hand-written, but
-                             its token blocks are generated — see above)
-scss/_properties.scss       generated: the --cam-* properties for the
-                             Bootstrap build (light, and dark under
-                             [data-bs-theme="dark"])
-js/cambridge-theme.js       the optional light/dark toggle — the theme's
-                             only script
-dist/                       precompiled Bootstrap build — commit this,
-                             it's what most consumers actually link
-examples/                   one working page per flavour
-docs/style-guide.html       the living reference — palette with real
-                             contrast ratios, type scale, every component
-                             (both headers, prose, footer included),
-                             do/don't notes
+tokens/tokens.json          source of truth: colour (light and dark), type, radii
+scripts/build-tokens.js     generates scss/_tokens.scss, scss/_properties.scss
+                             and the token blocks in css/cambridge-tokens.css
+scss/                       Bootstrap build (source)
+css/cambridge-tokens.css    framework-agnostic build (hand-written apart
+                             from its generated token blocks)
+dist/                       precompiled Bootstrap build; committed, it's
+                             what most consumers link
+js/cambridge-theme.js       the optional light/dark toggle, the only script
+assets/                     logo mark (light and dark), favicon
+examples/                   one page per flavour
+docs/style-guide.html       palette with contrast ratios, type, every component
 ```
 
 ## Changing a token
@@ -136,107 +101,89 @@ npm install
 npm run build
 ```
 
-That regenerates `scss/_tokens.scss` and the token block in
-`css/cambridge-tokens.css`, then rebuilds `dist/cambridge-theme.css` and
-`dist/cambridge-theme.min.css`. Commit all of it — `dist/` is checked in,
-not built on install, so consumers who just download the CSS get a working
-file without a Node toolchain.
+This regenerates the token files and rebuilds `dist/`. Commit all of it:
+`dist/` is checked in so consumers need no Node toolchain. Don't hand-edit
+`scss/_tokens.scss`, `scss/_properties.scss` or the generated blocks in
+`css/cambridge-tokens.css`.
 
-Don't hand-edit `scss/_tokens.scss` or the generated blocks inside
-`css/cambridge-tokens.css` — the next `npm run build` overwrites them.
+A token with a `"dark"` value is re-declared in dark mode; one without keeps
+its light value. `"aliases"` lists deprecated names (`--cam-teal`,
+`--cam-teal-ink`) pointing at their replacements; delete an entry once
+nothing uses it.
 
-A token with a `"dark"` value next to its `"value"` is re-declared for dark
-mode in the CSS build; one without keeps its light value in both. The
-top-level `"aliases"` map lists deprecated token names (`--cam-teal`,
-`--cam-teal-ink`) that now point at their replacements — delete an entry
-once nothing uses it.
+## Colour
 
-## Colour, briefly
+Pantone 547 (`--cam-ink`, `#133844`) is the dominant colour: text, headings,
+buttons, nav. The light blue from the Centre's logo (`--cam-accent`,
+`#72adde`, from `assets/cms-mark.svg`) is the *one* accent, used thin: a
+header rule, an active underline, a notice's edge. On a light page it is
+never a text or fill colour on its own; it fails WCAG AA both ways (2.3:1 as
+text on `--cam-bg`, 2.4:1 white on it). For accent-coloured text use
+`--cam-accent-ink` (`#215a8c`, 6.8:1).
 
-Pantone 547 (`--cam-ink`, `#133844`) is the dominant colour — text,
-headings, buttons, nav — not a bright blue. The light blue from the
-Centre's own logo (`--cam-accent`, `#72adde`, sampled from
-`assets/cms-mark.svg`) is the *one* accent, used thin: a header rule, an
-active underline, a notice's edge. On a light page it's never a text or
-fill colour by itself — it fails WCAG AA contrast both directions (2.3:1 as
-text on `--cam-bg`, 2.4:1 white on it). Where accent-coloured text has to
-be read, `--cam-accent-ink` (`#215a8c`, 6.8:1) is the darkened shade.
-
-The accent was Pantone 326 teal (`--cam-teal`, `#00bdb6`) until it moved to
-the logo blue. `--cam-teal` and `--cam-teal-ink` (and `$cam-teal*` in Sass)
-still work as deprecated aliases, so a site that hasn't been updated keeps
-an accent — now the blue — rather than silently losing it. This is a deliberate departure from applying the brand's full primary
-palette broadly: it's how the two Cambridge departmental sites this was
-checked against actually use colour, not how the brand guidelines' colour
-chips might suggest doing it in isolation.
+This is deliberate: it's how the two departmental sites checked against
+actually use colour (near-monochrome), not how the guidelines' colour chips
+suggest. The accent was Pantone 326 teal until it moved to the logo blue;
+`--cam-teal`, `--cam-teal-ink` and `$cam-teal*` remain as deprecated
+aliases.
 
 The six-colour primary palette (Red Ribbon, Science Blue, Tango, Vida Loca,
-Purple Heart, Pacific Blue) is held back for categorical data — status
-badges, chart series — the one place colour needs to carry meaning rather
-than accent the page. Three of the six are too light for white text at AA;
-darkened companion shades ship for those. Full numbers, and which shades to
-use where, are in `docs/style-guide.html`.
+Purple Heart, Pacific Blue) is kept for data where colour carries meaning:
+status badges, chart series. Three are too light for white text at AA, so
+darkened shades ship for them. Numbers are in the style guide.
 
 ## Dark mode
 
-*Prototype.* `css/cambridge-tokens.css` follows the OS's dark-mode setting
-with no JavaScript at all. To let people override it, add the toggle:
+*Prototype.* The vanilla build follows the OS setting with no JavaScript.
+To let people override it, add the toggle:
 
 ```html
 <!-- in <head>, not deferred: applies a saved choice before first paint -->
 <script src="node_modules/cms-web-theme/js/cambridge-theme.js"></script>
 
-<!-- anywhere in your header; the script un-hides it -->
+<!-- in your header; the script un-hides it -->
 <button type="button" class="cam-theme-toggle" data-cam-theme-toggle
         aria-label="Dark mode" aria-pressed="false" hidden>
   <svg class="cam-only-light" …moon… /> <svg class="cam-only-dark" …sun… />
 </button>
 ```
 
-The full icon markup is in `docs/style-guide.html` and the two example
-pages. A click sets `<html data-theme="light|dark">` and saves it to
-`localStorage`; with no saved choice the page follows the OS, including if
-it changes while the page is open. `data-theme` is all the CSS looks at, so
-a toggle of your own can just set that attribute. The script also fires a
-`cam-theme-change` event on `document` (`detail.theme`) for anything that
-needs to redraw, such as a canvas chart.
+Full icon markup is in the style guide and examples. A click sets
+`<html data-theme="light|dark">` and saves it in `localStorage`; with no
+saved choice the page follows the OS, live. `data-theme` is all the CSS
+reads, so a toggle of your own can set it. The script also fires
+`cam-theme-change` on `document` (`detail.theme`) for anything that needs to
+redraw.
 
-How it works: every token that matters has a `"dark"` value in
-`tokens/tokens.json`, and the build re-declares those under
-`@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) … }`
-and `:root[data-theme="dark"]`, so no component rule needs to know which
-mode it is in. `--cam-ink` is the *text* colour and so flips to a pale
-tint; the navy moves to the surfaces. Three things a token flip can't
-cover, handled explicitly:
+**How it works.** Tokens with a `"dark"` value are re-declared under
+`@media (prefers-color-scheme: dark)` and `:root[data-theme="dark"]`, so
+components don't know which mode they're in. `--cam-ink` is the text colour
+and goes pale; the navy moves to the surfaces. Where a token flip isn't
+enough:
 
-- **The primary button inverts** (pale pill, dark text) — hence the new
-  `--cam-on-ink` token in place of a hard-coded white.
-- **`.cam-hero-deep` keeps a navy fill** via its own `--cam-deep` token.
-- **Baked-in colours** — the select's chevron, the checkbox's tick, the
-  logo's black path — get dark twins. Use `.cam-only-light` /
-  `.cam-only-dark` to show one element per mode (`assets/cms-mark-dark.svg`
-  is the white-ink logo).
+- The primary button inverts (pale pill, dark text) via `--cam-on-ink`.
+- `.cam-hero-deep` keeps its navy via `--cam-deep`.
+- Baked-in colours (select chevron, checkbox tick, the logo's black path)
+  have dark twins. `.cam-only-light` / `.cam-only-dark` show one element per
+  mode; `assets/cms-mark-dark.svg` is the white-ink logo.
 
-Overriding a token yourself? Do it under both dark selectors too, or the
-dark block (more specific than a plain `:root`) will win in dark mode.
+Overriding a token yourself? Do it under both dark selectors too: the dark
+block is more specific than a plain `:root`.
 
-**Bootstrap build:** `dist/cambridge-theme.css` uses Bootstrap 5.3's own
-dark mode, `data-bs-theme="dark"`, with our palette in place of its greys.
-The toggle script sets that attribute for you; without the script, set it
-yourself. Unlike the vanilla build, it does not read the OS setting, so a
-page with neither the script nor the attribute stays light. The build also
-defines the same `--cam-*` custom properties as the vanilla one, flipped
-under `[data-bs-theme="dark"]`, and every `.cam-*` component reads them.
-Toggle markup and `.cam-only-*` work as above (the `.cam-theme-toggle`
-button gets `ms-2` in a navbar). Bootstrap's own components are themed
-where this repo uses them (buttons, forms, cards, tables, alerts, navbar);
-others get Bootstrap's dark defaults over our palette and may need tuning.
+**Bootstrap build.** Uses Bootstrap 5.3's `data-bs-theme="dark"`, with our
+palette in place of its greys; the script sets it. It doesn't read the OS
+setting, so without the script or the attribute the page stays light. It
+defines the same `--cam-*` properties, flipped under
+`[data-bs-theme="dark"]`, which the `.cam-*` components read. The toggle
+markup and `.cam-only-*` work the same (add `ms-2` to the toggle in a
+navbar). Components used in this repo are themed (buttons, forms, cards,
+tables, alerts, navbar); others get Bootstrap's dark defaults on our palette
+and may need tuning.
 
-## Layout and margins
+## Layout
 
-One gutter, three widths, one formula. Every centred container in the theme
-is built the same way, so the header, the hero, the body and the footer line
-up at every viewport width:
+One gutter, three widths, one formula for every centred container, so
+header, hero, body and footer line up at every width:
 
 ```css
 width: min(var(--cam-width-page), calc(100% - 2 * var(--cam-gutter)));
@@ -245,106 +192,56 @@ margin-inline: auto;
 
 | Token | Default | For |
 | --- | --- | --- |
-| `--cam-gutter` | `1.5rem` | Space between content and the viewport edge, everywhere |
+| `--cam-gutter` | `1.5rem` | Space between content and the viewport edge |
 | `--cam-width-page` | `76rem` | Full-width bands: header, masthead, footer |
 | `--cam-width-wide` | `60rem` | Wide content: hero, dashboards, tables (`.cam-container-wide`) |
 | `--cam-width-text` | `40rem` | Reading measure: prose, forms (`.cam-container`, `.cam-prose`) |
 
-`width: min()` rather than `max-width` + padding is deliberate. With
-`box-sizing: border-box`, padding eats into the content area once a
-container hits its max-width, so two containers with the same `max-width`
-but different padding end up different widths — which is exactly how the
-header and masthead drifted 1.5rem out of line before this was unified.
-Bands that wrap an `-inner` (`.cam-footer`) therefore carry vertical
-padding only; the gutter belongs to the container, once.
+`min()` rather than `max-width` plus padding: under `border-box`, padding
+eats into the content once a container hits its max, so equal max-widths
+with different padding come out different widths. Bands that wrap an
+`-inner` (`.cam-footer`) take vertical padding only.
 
-On the Bootstrap build, `$container-padding-x` is set from `$cam-gutter`,
-so Bootstrap's own `.container-*` share the same gutter, and
-`.cam-container` / `.cam-container-wide` exist there too with identical
-geometry to the vanilla build.
+The Bootstrap build sets `$container-padding-x` from `$cam-gutter`, and has
+`.cam-container` / `.cam-container-wide` with the same geometry.
 
 ## Typography
 
-Open Sans (body, UI) + Source Serif 4 (headings, wordmark), per the brand
+Open Sans (body, UI) and Source Serif 4 (headings, wordmark), per the
 guidelines' sans/serif pairing. Source Serif 4 stands in for Feijoa, the
-guidelines' actual display serif — a commercial face from the
+guidelines' display serif: a commercial face from the
 [Klim Type Foundry](https://klim.co.nz/fonts/feijoa/).
 
-### On using Feijoa itself
-
-The University licenses Feijoa and makes it available to staff: the
+**Using Feijoa.** The University licenses it for staff: see the
 [typography guidance](https://www.cam.ac.uk/brand-resources/guidelines/typography)
-points at the font downloads under
-[brand resources](https://www.cam.ac.uk/brand-resources), and University
-Managed Devices generally have it installed already. There is no public
-licence document to link to — the terms come with the download, behind
-Raven.
-
-That matters because a licence to *use* a font on your machine is not the
-same as a licence to *serve* it as a webfont. Before putting Feijoa on a
-public site, read the terms attached to the University's download and
-check with the brand team whether web embedding is covered by the
-University's agreement with Klim. This theme ships a free substitute
-precisely so nobody has to resolve that question to get started.
-
-If web embedding is covered for your site, change `fontSerif` in
-`tokens/tokens.json`, add your own `@font-face` block, and rebuild;
-nothing else in the theme names the face.
+and [brand resources](https://www.cam.ac.uk/brand-resources); Managed
+Devices usually have it. The terms come with the download, behind Raven. A
+licence to *use* a font isn't necessarily one to *serve* it as a webfont, so
+before using it on a public site, read the terms and check with the brand
+team. If cleared, change `fontSerif` in `tokens/tokens.json`, add your
+`@font-face`, and rebuild.
 
 ## Provenance
 
-This theme did not come from reading the brand guidelines alone. The first
-pass at applying them (on mf-service) took the guidelines' colour and type
-facts and over-produced: a decorative six-colour bar across the top of
-every page, Science Blue as the dominant interactive colour, coloured rules
-under section headings. None of that is in the guidelines *or* in how
-Cambridge actually builds pages with them — it's what "apply this palette"
-turns into without a reference.
+Not derived from the guidelines alone. A first pass applied their colour and
+type facts directly and over-produced: a six-colour bar on every page,
+Science Blue as the dominant colour, coloured rules under headings. A second,
+checked against screenshots of [phy.cam.ac.uk](https://www.phy.cam.ac.uk/)
+and [mus.cam.ac.uk](https://www.mus.cam.ac.uk/), corrected to what those
+sites do: near-monochrome, ink-dominant, one thin accent. (Direct fetches
+were blocked where this was built, so it was never a systematic survey.)
+Later passes added the masthead, hero and prose for content pages, and fixed
+spacing drift in `.cam-header` found by diffing rendered pixels against
+mf-service.
 
-A second pass, checked against screenshots of
-[phy.cam.ac.uk](https://www.phy.cam.ac.uk/) and
-[mus.cam.ac.uk](https://www.mus.cam.ac.uk/) supplied during review (direct
-fetches to those domains were blocked in the environment this was built
-in — this was never a systematic crawl of either site), corrected toward
-what's actually here: close to monochrome, ink-dominant, one thin accent.
-A third and fourth pass then pulled back a full masthead band and a
-full-bleed hero band — both modelled on real elements of those sites (the
-Cavendish's dark hero, the Music faculty's masthead) — once they read as
-over-branded in the context of an actual small internal tool rather than a
-departmental homepage.
-
-Two things follow from that history:
-
-1. **Verify before you rely on it.** This is a considered, iterated
-   approximation of the identity, arrived at through review and correction
-   — not a specification pulled from an authoritative source. If a site
-   using this theme needs to match Cambridge's identity precisely (an
-   official or public-facing page, say), look at the live guidelines and
-   department sites yourself rather than trusting this package's reading
-   of them.
+1. **Verify before relying on it.** This is a considered approximation, not
+   a specification. If a site must match Cambridge's identity precisely,
+   check the live guidelines and department sites.
 2. **Say what a site is, if it isn't official.** None of the services this
-   theme is meant for are official University of Cambridge pages. Whether
-   that needs stating on the page itself is a per-site judgement — put it
-   in a footer, an About page, wherever fits — but don't let a page that
-   now looks the part imply an affiliation it doesn't have.
-
-A third pass ported mf-service's actual, by-then-settled page onto this
-package to check the two matched — not by eye, by diffing rendered pixels
-and computed styles between the app on its own bespoke CSS and the app on
-the theme. They didn't match on the first attempt: `p { line-height:
-1.55 }` fought the app's own `1.5` and produced a slow drift down the
-page; `h1` had no margin reset, so the browser's default (em-relative to
-`h1`'s own font-size) leaked back in once the theme changed that size;
-and the wordmark link was a few pixels short because the original had
-picked up padding and a transparent border incidentally, being a plain
-`<a>` that also matched a broader nav-link selector. All three are fixed
-here — they're the reason `.cam-header` looks the way it does now, not a
-guess. A fourth pass then broadened the theme past mf-service's own
-shape: `.cam-masthead` + `.cam-hero` and `.cam-prose` exist because a
-single-row nav-only header and no content typography at all were fine
-for mf-service specifically, but not a reasonable ceiling for "a site."
+   is for are official University pages. Whether the page needs to say so is
+   a per-site call, but don't let it imply an affiliation it doesn't have.
 
 ## Licence
 
-MIT. No University of Cambridge shield, crest, or other reserved mark is
-included or should be added — those stay reserved for official use.
+MIT. No University of Cambridge shield, crest or other reserved mark is
+included or should be added.

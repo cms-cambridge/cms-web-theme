@@ -33,9 +33,8 @@ jobs:
           mkdir -p _site
           cp -r assets css dist docs examples js tokens README.md LICENSE _site/
           cp docs/style-guide.html _site/index.html
-          # index.html is style-guide.html moved up one level, so every ../ path
-          # in it has to lose that hop. src= as well as href=: the header mark is
-          # an <img>, and a missing rule here is a silent 404 on the live site.
+          # index.html is style-guide.html one level up, so every ../ path loses a
+          # hop. src= as well as href=: a missed one is a silent 404 on the site.
           sed -i \
             -e 's#href="\.\./css/#href="css/#g' \
             -e 's#href="\.\./dist/#href="dist/#g' \
