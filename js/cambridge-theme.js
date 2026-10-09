@@ -16,10 +16,10 @@
  *     setting keeps deciding — including changing under an open page.
  *   - Wires every [data-cam-theme-toggle] button (see .cam-theme-toggle in
  *     the CSS): a click saves and applies the opposite of what's showing.
- *   - Mirrors the effective theme to data-bs-theme, which is Bootstrap
- *     5.3's own switch. Only useful on a page that also loads the Bootstrap
- *     build, which does not have branded dark colours yet — this gets it
- *     Bootstrap's stock dark palette rather than light-on-dark mismatches.
+ *   - Mirrors the effective theme to data-bs-theme, Bootstrap 5.3's own
+ *     switch, which is what the Bootstrap build (dist/cambridge-theme.css)
+ *     keys its dark mode on. Without this script, set data-bs-theme
+ *     yourself; the Bootstrap build does not read the OS setting.
  *   - Fires a "cam-theme-change" event on document, detail { theme }, for
  *     anything of yours that needs to redraw (a canvas chart, say).
  *

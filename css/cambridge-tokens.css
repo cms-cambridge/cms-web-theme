@@ -49,9 +49,8 @@
   --cam-radius-sm: 3px;
   --cam-radius-md: 4px;
   --cam-radius-pill: 999px;
-  /* Deprecated names — see "aliases" in tokens.json. var() so they follow dark mode. */
-  --cam-teal: var(--cam-accent);
-  --cam-teal-ink: var(--cam-accent-ink);
+  --cam-teal: var(--cam-accent); /* deprecated */
+  --cam-teal-ink: var(--cam-accent-ink); /* deprecated */
   /* --- GENERATED TOKENS: end --- */
 }
 

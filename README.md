@@ -107,12 +107,15 @@ in your own CSS.
 
 ```
 tokens/tokens.json          single source of truth — colour, type, radii
-scripts/build-tokens.js     generates scss/_tokens.scss and the token
-                             blocks (light and dark) in
-                             css/cambridge-tokens.css from it
+scripts/build-tokens.js     generates scss/_tokens.scss,
+                             scss/_properties.scss and the token blocks
+                             (light and dark) in css/cambridge-tokens.css
 scss/                       Bootstrap 5 build (source)
 css/cambridge-tokens.css    framework-agnostic build (hand-written, but
                              its token blocks are generated — see above)
+scss/_properties.scss       generated: the --cam-* properties for the
+                             Bootstrap build (light, and dark under
+                             [data-bs-theme="dark"])
 js/cambridge-theme.js       the optional light/dark toggle — the theme's
                              only script
 dist/                       precompiled Bootstrap build — commit this,
@@ -176,9 +179,8 @@ use where, are in `docs/style-guide.html`.
 
 ## Dark mode
 
-*Prototype — framework-agnostic build only.* `css/cambridge-tokens.css`
-follows the OS's dark-mode setting with no JavaScript at all. To let people
-override it, add the toggle:
+*Prototype.* `css/cambridge-tokens.css` follows the OS's dark-mode setting
+with no JavaScript at all. To let people override it, add the toggle:
 
 ```html
 <!-- in <head>, not deferred: applies a saved choice before first paint -->
@@ -218,12 +220,17 @@ cover, handled explicitly:
 Overriding a token yourself? Do it under both dark selectors too, or the
 dark block (more specific than a plain `:root`) will win in dark mode.
 
-**Bootstrap build:** not branded for dark yet. The script also sets
-Bootstrap 5.3's `data-bs-theme`, which gives a Bootstrap page Bootstrap's
-stock grey dark palette; the theme's own additions there (`.cam-modal`,
-`.cam-masthead`, `.cam-hero`, `.cam-prose`) read `--cam-*` when the page
-defines it and fall back to compiled light values otherwise, so a
-Bootstrap-only page is unchanged.
+**Bootstrap build:** `dist/cambridge-theme.css` uses Bootstrap 5.3's own
+dark mode, `data-bs-theme="dark"`, with our palette in place of its greys.
+The toggle script sets that attribute for you; without the script, set it
+yourself. Unlike the vanilla build, it does not read the OS setting, so a
+page with neither the script nor the attribute stays light. The build also
+defines the same `--cam-*` custom properties as the vanilla one, flipped
+under `[data-bs-theme="dark"]`, and every `.cam-*` component reads them.
+Toggle markup and `.cam-only-*` work as above (the `.cam-theme-toggle`
+button gets `ms-2` in a navbar). Bootstrap's own components are themed
+where this repo uses them (buttons, forms, cards, tables, alerts, navbar);
+others get Bootstrap's dark defaults over our palette and may need tuning.
 
 ## Layout and margins
 

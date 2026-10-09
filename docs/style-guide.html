@@ -44,16 +44,6 @@
   .dont { border-left: 3px solid var(--cam-danger); padding: 0.1rem 0 0.1rem 1rem; margin: 0.75rem 0; }
   .do { border-left: 3px solid light-dark(#3e7a14, #86c855); padding: 0.1rem 0 0.1rem 1rem; margin: 0.75rem 0; }
   pre.code { background: #10262d; color: #eef5f6; padding: 0.9rem 1rem; border: 1px solid var(--cam-line); border-radius: 6px; overflow-x: auto; font-size: 0.82rem; }
-  /* Bootstrap's stock dark palette is grey. Until the Bootstrap build is
-     branded for dark, bridge only the page-level variables so the doc page
-     itself isn't two-tone; the Bootstrap demos further down remain stock. */
-  [data-bs-theme="dark"] {
-    --bs-body-bg: var(--cam-bg);
-    --bs-body-color: var(--cam-ink);
-    --bs-emphasis-color: var(--cam-ink);
-    --bs-secondary-color: var(--cam-muted);
-    --bs-border-color: var(--cam-line);
-  }
   @media (max-width: 640px) { .demo-pair { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -368,13 +358,14 @@
     looks at; a consumer who wants their own toggle can set that attribute
     themselves.
   </p>
-  <div class="cam-notice" role="note">
-    <strong>Not yet branded for the Bootstrap build.</strong> The script also
-    sets Bootstrap 5.3's own <code>data-bs-theme</code>, so a Bootstrap page
-    gets Bootstrap's stock grey dark palette rather than a light/dark mix —
-    which is what the "Bootstrap" columns below show in dark mode. Giving
-    <code>dist/cambridge-theme.css</code> the palette above is the next step.
-  </div>
+  <p class="doc-lede">
+    The Bootstrap build uses Bootstrap 5.3's own switch,
+    <code>data-bs-theme="dark"</code>, with this palette in place of its
+    greys. The script sets that attribute too, so both columns in the
+    component demos below follow the toggle. Unlike the framework-agnostic
+    build, it doesn't read the OS setting itself — without the script, set
+    the attribute yourself.
+  </p>
 </div>
 
 <div class="doc-section">

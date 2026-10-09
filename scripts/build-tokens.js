@@ -1,15 +1,12 @@
 #!/usr/bin/env node
-// Generates scss/_tokens.scss and the two token blocks in
-// css/cambridge-tokens.css (light, then dark) from tokens/tokens.json.
-// Run via `npm run build:tokens` (part of `npm run build`).
+// Generates, from tokens/tokens.json (`npm run build:tokens`, part of `npm run build`):
+//   scss/_tokens.scss      Sass variables + Bootstrap overrides (light and dark)
+//   scss/_properties.scss  --cam-* custom properties for the Bootstrap build
+//   css/cambridge-tokens.css   the token blocks (light, dark) in the vanilla build
+// Edit tokens.json and re-run; don't edit the generated files or blocks.
 //
-// tokens.json is hand-edited; these files are generated. Don't edit
-// _tokens.scss or the "GENERATED ... TOKENS" blocks in cambridge-tokens.css
-// directly — edit tokens.json and re-run.
-//
-// A token may carry a "dark" value next to its "value". Those are emitted
-// only into the CSS build (the Bootstrap build has no dark mode yet).
-// Top-level "aliases" maps a deprecated token name onto its replacement.
+// A token's "dark" value is its dark-mode override. "aliases" maps a
+// deprecated token name to its replacement.
 
 const fs = require("fs");
 const path = require("path");
@@ -19,104 +16,117 @@ const tokens = JSON.parse(fs.readFileSync(path.join(ROOT, "tokens/tokens.json"),
 
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 
-// Flat scalar tokens only (skip $comment and nested objects like categoricalPalette).
+// Flat scalar tokens only (skips $comment and nested objects like categoricalPalette).
 const entries = Object.entries(tokens).filter(
   ([key, val]) => key !== "$comment" && val && typeof val === "object" && "value" in val
 );
-
 const aliases = Object.entries(tokens.aliases || {}).filter(([key]) => key !== "$comment");
 const darkEntries = entries.filter(([, val]) => "dark" in val);
 
-// --- scss/_tokens.scss -------------------------------------------------
-const scssLines = [
-  "// GENERATED FILE — do not edit directly.",
-  "// Source: tokens/tokens.json. Regenerate with `npm run build:tokens`.",
+// --- scss/_tokens.scss --------------------------------------------------
+const scss = [
+  "// GENERATED FILE — do not edit. Source: tokens/tokens.json (`npm run build:tokens`).",
   "//",
-  "// Bootstrap variable overrides. This file must be @imported BEFORE",
-  "// \"bootstrap/scss/bootstrap\" — Bootstrap only picks up a variable if it",
-  "// isn't already set (`!default`), so order matters.",
-  "//",
-  "// Light values only: the Bootstrap build has no dark mode yet, so the",
-  "// \"dark\" values in tokens.json are emitted into the CSS build alone.",
+  "// Bootstrap variable overrides. @import before \"bootstrap/scss/bootstrap\":",
+  "// Bootstrap only takes a variable it hasn't already seen (`!default`).",
   "",
 ];
-for (const [key, val] of entries) {
-  scssLines.push(`$cam-${kebab(key)}: ${val.value};`);
-}
+for (const [key, val] of entries) scss.push(`$cam-${kebab(key)}: ${val.value};`);
+for (const [key, val] of darkEntries) scss.push(`$cam-${kebab(key)}-dark: ${val.dark};`);
 if (aliases.length) {
-  scssLines.push("");
-  scssLines.push("// Deprecated names — see \"aliases\" in tokens.json.");
-  for (const [oldKey, newKey] of aliases) {
-    scssLines.push(`$cam-${kebab(oldKey)}: $cam-${kebab(newKey)};`);
-  }
+  scss.push("", "// Deprecated names (\"aliases\" in tokens.json).");
+  for (const [oldKey, newKey] of aliases) scss.push(`$cam-${kebab(oldKey)}: $cam-${kebab(newKey)};`);
 }
-scssLines.push("");
-scssLines.push("// Map onto the Bootstrap variables that drive its component styles.");
-scssLines.push("$body-color:              $cam-ink;");
-scssLines.push("$body-bg:                 $cam-bg;");
-scssLines.push("$primary:                 $cam-ink;");
-scssLines.push("$secondary:               $cam-muted;");
-scssLines.push("$danger:                  $cam-danger;");
-scssLines.push("$info:                    $cam-accent-ink;");
-scssLines.push("$border-color:            $cam-line;");
-scssLines.push("$link-color:              $cam-ink;");
-scssLines.push("$link-hover-color:        $cam-accent-ink;");
-scssLines.push("$font-family-sans-serif:  $cam-font-sans;");
-scssLines.push("$font-family-base:        $cam-font-sans;");
-scssLines.push("$headings-font-family:    $cam-font-serif;");
-scssLines.push("$headings-font-weight:    600;");
-scssLines.push("$headings-color:          $cam-ink;");
-scssLines.push("$border-radius:           $cam-radius-md;");
-scssLines.push("$border-radius-sm:        $cam-radius-sm;");
-scssLines.push("$border-radius-lg:        $cam-radius-md;");
-scssLines.push("$border-radius-pill:      $cam-radius-pill;");
-scssLines.push("$btn-border-radius:       $cam-radius-pill;");
-scssLines.push("$btn-border-radius-sm:    $cam-radius-pill;");
-scssLines.push("$btn-border-radius-lg:    $cam-radius-pill;");
-scssLines.push("$focus-ring-color:        rgba($cam-focus, 0.35);");
-scssLines.push("// One gutter across both flavours: Bootstrap's .container picks this up,");
-scssLines.push("// the vanilla build's containers read --cam-gutter.");
-scssLines.push("$container-padding-x:     $cam-gutter;");
-scssLines.push("$grid-gutter-width:       $cam-gutter * 2;");
-scssLines.push("$enable-negative-margins: true;");
-scssLines.push("");
+scss.push(
+  "",
+  "// Bootstrap variables that drive its component styles.",
+  "$body-color:              $cam-ink;",
+  "$body-bg:                 $cam-bg;",
+  "$primary:                 $cam-ink;",
+  "$secondary:               $cam-muted;",
+  "$danger:                  $cam-danger;",
+  "$info:                    $cam-accent-ink;",
+  "$border-color:            $cam-line;",
+  "$link-color:              $cam-ink;",
+  "$link-hover-color:        $cam-accent-ink;",
+  "$font-family-sans-serif:  $cam-font-sans;",
+  "$font-family-base:        $cam-font-sans;",
+  "$headings-font-family:    $cam-font-serif;",
+  "$headings-font-weight:    600;",
+  "$headings-color:          $cam-ink;",
+  "$border-radius:           $cam-radius-md;",
+  "$border-radius-sm:        $cam-radius-sm;",
+  "$border-radius-lg:        $cam-radius-md;",
+  "$border-radius-pill:      $cam-radius-pill;",
+  "$btn-border-radius:       $cam-radius-pill;",
+  "$btn-border-radius-sm:    $cam-radius-pill;",
+  "$btn-border-radius-lg:    $cam-radius-pill;",
+  "$focus-ring-color:        rgba($cam-focus, 0.35);",
+  "// One gutter for both builds.",
+  "$container-padding-x:     $cam-gutter;",
+  "$grid-gutter-width:       $cam-gutter * 2;",
+  "$enable-negative-margins: true;",
+  "",
+  "// Bootstrap's own dark mode ([data-bs-theme=\"dark\"]), on our palette.",
+  "$body-color-dark:           $cam-ink-dark;",
+  "$body-bg-dark:              $cam-bg-dark;",
+  "$body-emphasis-color-dark:  $cam-ink-deep-dark;",
+  "$body-secondary-color-dark: $cam-muted-dark;",
+  "$body-secondary-bg-dark:    $cam-fill-dark;",
+  "$body-tertiary-bg-dark:     $cam-surface-dark;",
+  "$border-color-dark:         $cam-line-dark;",
+  "$link-color-dark:           $cam-ink-dark;",
+  "$link-hover-color-dark:     $cam-accent-ink-dark;",
+  ""
+);
+fs.writeFileSync(path.join(ROOT, "scss/_tokens.scss"), scss.join("\n") + "\n");
+
+// Declarations shared by the CSS outputs below.
+const lightDecls = (indent) => [
+  ...entries.map(([key, val]) => `${indent}--cam-${kebab(key)}: ${val.value};`),
+  ...aliases.map(([o, n]) => `${indent}--cam-${kebab(o)}: var(--cam-${kebab(n)}); /* deprecated */`),
+];
+const darkDecls = (indent) =>
+  darkEntries.map(([key, val]) => `${indent}--cam-${kebab(key)}: ${val.dark};`);
+
+// --- scss/_properties.scss (Bootstrap build) ------------------------------
+// Keyed on Bootstrap's own switch, data-bs-theme.
 fs.writeFileSync(
-  path.join(ROOT, "scss/_tokens.scss"),
-  scssLines.join("\n") + "\n"
+  path.join(ROOT, "scss/_properties.scss"),
+  [
+    "// GENERATED FILE — do not edit. Source: tokens/tokens.json (`npm run build:tokens`).",
+    "",
+    ":root {",
+    ...lightDecls("  "),
+    "}",
+    "",
+    "[data-bs-theme=\"dark\"] {",
+    ...darkDecls("  "),
+    "}",
+    "",
+  ].join("\n")
 );
 
-// --- css/cambridge-tokens.css (two generated blocks) --------------------
-const light = ["  /* --- GENERATED TOKENS: start (see tokens/tokens.json) --- */"];
-for (const [key, val] of entries) {
-  light.push(`  --cam-${kebab(key)}: ${val.value};`);
-}
-if (aliases.length) {
-  light.push("  /* Deprecated names — see \"aliases\" in tokens.json. var() so they follow dark mode. */");
-  for (const [oldKey, newKey] of aliases) {
-    light.push(`  --cam-${kebab(oldKey)}: var(--cam-${kebab(newKey)});`);
-  }
-}
-light.push("  /* --- GENERATED TOKENS: end --- */");
-
-// The dark values appear twice, because there are two ways to be in dark
-// mode and CSS can't OR a media query with an attribute selector:
-//   - the OS asks for it and the page hasn't said otherwise (no JS needed);
-//   - the page says so, via data-theme="dark" (what the toggle sets).
-// data-theme="light" beats an OS preference for dark; that is what lets the
-// toggle override the OS in either direction.
-const darkDecls = (indent) => [
-  `${indent}color-scheme: dark;`,
-  ...darkEntries.map(([key, val]) => `${indent}--cam-${kebab(key)}: ${val.dark};`),
+// --- css/cambridge-tokens.css (vanilla build): light and dark blocks -------
+const light = [
+  "  /* --- GENERATED TOKENS: start (see tokens/tokens.json) --- */",
+  ...lightDecls("  "),
+  "  /* --- GENERATED TOKENS: end --- */",
 ];
+
+// Dark is declared twice because CSS can't OR a media query with an attribute:
+// the OS asks for it and the page hasn't said light, or the page says dark.
 const dark = [
   "/* --- GENERATED DARK TOKENS: start (see tokens/tokens.json) --- */",
   "@media (prefers-color-scheme: dark) {",
   "  :root:not([data-theme=\"light\"]) {",
+  "    color-scheme: dark;",
   ...darkDecls("    "),
   "  }",
   "}",
   "",
   ":root[data-theme=\"dark\"] {",
+  "  color-scheme: dark;",
   ...darkDecls("  "),
   "}",
   "/* --- GENERATED DARK TOKENS: end --- */",
@@ -125,8 +135,7 @@ const dark = [
 const cssPath = path.join(ROOT, "css/cambridge-tokens.css");
 let css = fs.existsSync(cssPath) ? fs.readFileSync(cssPath, "utf8") : "";
 
-// Each marker pair's own leading whitespace is part of the match, so a
-// re-run can't compound indentation each time it replaces a block.
+// The match includes each marker's leading whitespace so re-runs don't compound indentation.
 const blockRe = (name) =>
   new RegExp(
     `[ \\t]*\\/\\* --- GENERATED ${name}: start \\(see tokens\\/tokens\\.json\\) --- \\*\\/[\\s\\S]*?\\/\\* --- GENERATED ${name}: end --- \\*\\/`
@@ -135,14 +144,11 @@ const blockRe = (name) =>
 for (const [name, lines] of [["TOKENS", light], ["DARK TOKENS", dark]]) {
   const re = blockRe(name);
   if (!re.test(css)) {
-    console.error(
-      `css/cambridge-tokens.css is missing the GENERATED ${name} markers — ` +
-        "run this after creating the file with those markers in place, not before."
-    );
+    console.error(`css/cambridge-tokens.css is missing the GENERATED ${name} markers.`);
     process.exit(1);
   }
   css = css.replace(re, () => lines.join("\n"));
 }
 fs.writeFileSync(cssPath, css);
 
-console.log("Generated scss/_tokens.scss and updated css/cambridge-tokens.css");
+console.log("Generated scss/_tokens.scss, scss/_properties.scss and css/cambridge-tokens.css blocks");
