@@ -7,8 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&display=swap" rel="stylesheet">
-  <!-- No Bootstrap, no build step: this file alone is the whole theme. -->
+  <!-- No Bootstrap, no build step: this file is the whole theme. -->
   <link rel="stylesheet" href="../css/cambridge-tokens.css">
+  <!-- Optional light/dark toggle. In <head>, not deferred, so a saved choice
+       applies before first paint. Without it the page follows the OS. -->
+  <script src="../js/cambridge-theme.js"></script>
 </head>
 <body>
   <header class="cam-header">
@@ -19,14 +22,17 @@
       <a class="cam-nav-link" href="#">Docs</a>
       <span class="cam-nav-gap"></span>
       <a class="cam-nav-link" href="#">Sign in</a>
+      <button type="button" class="cam-theme-toggle" data-cam-theme-toggle aria-label="Dark mode" aria-pressed="false" hidden>
+        <svg class="cam-only-light" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M13.4 9.3A5.7 5.7 0 0 1 6.7 2.6a5.7 5.7 0 1 0 6.7 6.7z"/></svg>
+        <svg class="cam-only-dark" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="2.6"/><path d="M8 1.6v1.5M8 12.9v1.5M1.6 8h1.5M12.9 8h1.5M3.5 3.5l1.05 1.05M11.45 11.45l1.05 1.05M3.5 12.5l1.05-1.05M11.45 4.55l1.05-1.05"/></svg>
+      </button>
     </div>
   </header>
 
   <main class="cam-container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
     <h1><em class="cam-brand">your-service</em></h1>
     <p class="cam-muted" style="max-width: 34em;">
-      A one-line description of what this tool does, in the same voice as
-      the upload page it's modelled on.
+      One line on what this tool does.
     </p>
 
     <p class="cam-notice" role="status" style="margin: 1.2rem 0;">

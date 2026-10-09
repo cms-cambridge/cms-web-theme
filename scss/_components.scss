@@ -1,56 +1,56 @@
-// Additive styles on top of stock Bootstrap. Its own classes (.btn,
-// .navbar, .card, .alert, .badge, .table, .form-control…) already carry
-// the palette via _tokens.scss — this file covers what Bootstrap has no
-// variable for.
+// Additions on top of stock Bootstrap, for what it has no variable for.
+// Its own classes (.btn, .navbar, .card…) get the palette from _tokens.scss.
+//
+// Colours go through themed(): the --cam-* property (defined in
+// _properties.scss, flipped under [data-bs-theme="dark"]), with the compiled
+// light value as fallback for contexts where it doesn't resolve.
+@function themed($name, $fallback) {
+  @return var(--cam-#{$name}, #{$fallback});
+}
 
-// Italic serif wordmark — for your own product/site name, not general
-// emphasis.
+// Italic serif wordmark, for your own product/site name.
 .cam-brand {
   font-family: $cam-font-serif;
   font-style: italic;
   font-weight: inherit;
 }
 
-// The header accent rule + underline nav. Add alongside Bootstrap's .navbar.
+// Header accent rule + underline nav. Add alongside .navbar.
 .navbar-cambridge {
-  border-bottom: 3px solid $cam-teal;
+  background-color: themed(surface, $cam-surface);
+  border-bottom: 3px solid themed(accent, $cam-accent);
 
   .nav-link {
     border-bottom: 2px solid transparent;
     border-radius: 0;
 
     &:hover {
-      color: $cam-teal-ink;
-      border-bottom-color: $cam-teal;
+      color: themed(accent-ink, $cam-accent-ink);
+      border-bottom-color: themed(accent, $cam-accent);
     }
 
     &.active {
-      border-bottom-color: $cam-ink;
+      border-bottom-color: themed(ink, $cam-ink);
       font-weight: 600;
     }
   }
 }
 
-// A quiet status line — neutral fill, one coloured edge — where Bootstrap's
-// .alert-* saturated fills read as too loud (a session/auth aside, not a
-// dismissible warning).
+// A quiet status line: neutral fill, one coloured edge. For asides where
+// .alert-*'s saturated fills read as too loud.
 .alert-cambridge {
-  background: $cam-fill;
+  background: themed(fill, $cam-fill);
   border: 0;
-  border-left: 3px solid $cam-teal-ink;
+  border-left: 3px solid themed(accent-ink, $cam-accent-ink);
   border-radius: $cam-radius-md;
-  color: $cam-ink;
+  color: themed(ink, $cam-ink);
 }
 
-// One panel over a blurred page — a welcome box, a first-run explainer, a
-// short confirm. Built on <dialog> + showModal() so the browser supplies
-// the top layer, the focus trap, the inert page, Escape to close and
-// ::backdrop; Bootstrap's own .modal — the framework's, not this one —
-// stays the right answer when you want its JS API, its stacking or its
-// full-width sheet on small screens. Same
-// class names as the framework-agnostic build, so a page ported between
-// the two flavours doesn't shift. The markup, and why the primary button
-// takes autofocus, are documented in css/cambridge-tokens.css.
+// Modal: one panel over a blurred page, on <dialog> + showModal() (the
+// browser supplies top layer, focus trap, inert page, Escape, ::backdrop).
+// Same class names as the vanilla build; markup is documented in
+// css/cambridge-tokens.css. Bootstrap's own .modal is the better fit when
+// you want its JS API or a full-width sheet on small screens.
 
 .cam-modal {
   width: min(30rem, calc(100% - 2 * $cam-gutter));
@@ -58,16 +58,15 @@
   overflow: auto;
   margin: auto;
   padding: 2rem 2.25rem 1.75rem;
-  background: $cam-surface;
-  color: $cam-ink;
-  // The same 3px teal rule .navbar-cambridge and .cam-masthead-id carry.
-  border: 1px solid $cam-line;
-  border-top: 3px solid $cam-teal;
+  background: themed(surface, $cam-surface);
+  color: themed(ink, $cam-ink);
+  border: 1px solid themed(line, $cam-line);
+  border-top: 3px solid themed(accent, $cam-accent);
   border-radius: $cam-radius-md;
-  box-shadow: $cam-shadow-modal;
+  box-shadow: themed(shadow-modal, $cam-shadow-modal);
 
-  // var(…, <literal>) on purpose: ::backdrop inherited from nothing at all
-  // until 2023, so on an older engine the literal is what paints.
+  // Literal fallbacks on purpose: ::backdrop didn't inherit custom
+  // properties before 2023.
   &::backdrop {
     background: var(--cam-overlay, #{$cam-overlay});
     backdrop-filter: blur(var(--cam-overlay-blur, #{$cam-overlay-blur}));
@@ -75,8 +74,7 @@
   }
 }
 
-// For pages without <dialog>, or where the box is part of the page's own
-// flow. The keyboard behaviour is then yours to write.
+// For pages without <dialog>. Keyboard behaviour is then yours to write.
 .cam-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -84,7 +82,7 @@
   display: grid;
   place-items: center;
   padding: 2rem 0;
-  background: $cam-overlay;
+  background: themed(overlay, $cam-overlay);
   backdrop-filter: blur($cam-overlay-blur);
   -webkit-backdrop-filter: blur($cam-overlay-blur);
 }
@@ -96,20 +94,16 @@
   gap: 1rem;
 }
 
-// Wider tracking than a table header's: this is a single word on its own
-// above a serif line, not a column of repeated labels.
 .cam-modal-kicker {
   margin: 0 0 0.4rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
-// An explicit class, not a bare h2: an app that restyles h2 for its own
-// purposes would otherwise flatten the modal's title without touching
-// this file.
+// A class, not a bare h2, so an app restyling h2 doesn't flatten it.
 .cam-modal-title {
   margin: 0;
   font-family: $cam-font-serif;
@@ -117,11 +111,10 @@
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.015em;
-  color: $cam-ink;
+  color: themed(ink, $cam-ink);
 }
 
-// 2.75rem = the 44px pointer target, pulled back out of the padding by the
-// negative margins so the glyph still lines up with the box's corner.
+// 2.75rem = 44px target; negative margins keep the glyph on the corner.
 .cam-modal-close {
   flex: none;
   width: 2.75rem;
@@ -133,15 +126,15 @@
   background: none;
   border: 0;
   border-radius: $cam-radius-sm;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
 
   &:hover {
-    background: $cam-fill;
-    color: $cam-ink;
+    background: themed(fill, $cam-fill);
+    color: themed(ink, $cam-ink);
   }
 
   &:focus-visible {
-    outline: 2px solid $cam-focus;
+    outline: 2px solid themed(focus, $cam-focus);
     outline-offset: 2px;
   }
 
@@ -168,12 +161,12 @@
   align-items: flex-start;
   gap: 0.8rem;
   padding: 0.75rem 0;
-  border-top: 1px solid $cam-line;
+  border-top: 1px solid themed(line, $cam-line);
   font-size: 0.9rem;
   line-height: 1.5;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
 
-  &:last-child { border-bottom: 1px solid $cam-line; }
+  &:last-child { border-bottom: 1px solid themed(line, $cam-line); }
 }
 
 .cam-modal-step-mark {
@@ -183,11 +176,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $cam-fill;
+  background: themed(fill, $cam-fill);
   border-radius: $cam-radius-sm;
   font-size: 0.75rem;
   font-weight: 700;
-  color: $cam-teal-ink;
+  color: themed(accent-ink, $cam-accent-ink);
 }
 
 .cam-modal-actions {
@@ -199,21 +192,19 @@
   margin-top: 1.4rem;
 }
 
-// Bootstrap's .form-check-input is the checkbox here, so only the row's
-// own layout needs stating.
+// Bootstrap's .form-check-input is the checkbox, so only the row needs styling.
 .cam-modal-opt {
   display: flex;
   align-items: center;
   gap: 0.55rem;
   font-size: 0.84rem;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
   cursor: pointer;
 
   .form-check-input { margin: 0; flex-shrink: 0; }
 }
 
-// At phone width the two halves of .cam-modal-actions can't sit side by
-// side without the button shrinking below a comfortable target.
+// At phone width the actions stack and the button takes the full measure.
 @media (max-width: 30rem) {
   .cam-modal { padding: 1.5rem 1.4rem 1.4rem; }
   .cam-modal-title { font-size: 1.35rem; }
@@ -228,11 +219,11 @@
   .cam-modal-opt { justify-content: center; }
 }
 
-// The content-page header: an identity band, then a title band. .navbar
-// (+ .navbar-cambridge above) stays the header for an app or tool.
+// Content-page header: identity band, then title band. .navbar
+// (+ .navbar-cambridge) stays the header for an app or tool.
 
 .cam-masthead {
-  background: $cam-surface;
+  background: themed(surface, $cam-surface);
 }
 
 .cam-masthead-id {
@@ -240,24 +231,24 @@
   font-size: 1.25rem;
   font-style: italic;
   font-weight: 600;
-  color: $cam-ink;
+  color: themed(ink, $cam-ink);
   text-decoration: none;
   padding-bottom: 0.22rem;
-  border-bottom: 3px solid $cam-teal;
+  border-bottom: 3px solid themed(accent, $cam-accent);
 
-  &:hover { color: $cam-ink; }
+  &:hover { color: themed(ink, $cam-ink); }
 }
 
 .cam-masthead-unit {
   padding-left: 0.9rem;
-  border-left: 1px solid $cam-line-strong;
-  color: $cam-muted;
+  border-left: 1px solid themed(line-strong, $cam-line-strong);
+  color: themed(muted, $cam-muted);
   font-size: 0.92rem;
 }
 
 .cam-hero {
-  background: $cam-fill;
-  border-top: 1px solid $cam-line;
+  background: themed(fill, $cam-fill);
+  border-top: 1px solid themed(line, $cam-line);
   padding: 3.1rem 0 3.3rem;
 
   h1 {
@@ -269,13 +260,14 @@
     margin-top: 0.85rem;
     max-width: 38em;
     font-size: 1.02rem;
-    color: $cam-muted;
+    color: themed(muted, $cam-muted);
   }
 }
 
-// Deep variant: Pantone 547 full-bleed. Once per site, on the homepage.
+// Pantone 547 full-bleed. Once per site, on the homepage. --cam-deep, not
+// --cam-ink: ink is the text colour and goes pale in dark mode.
 .cam-hero-deep {
-  background: $cam-ink;
+  background: themed(deep, $cam-deep);
   color: #fff;
 
   h1, p { color: #fff; }
@@ -283,10 +275,9 @@
   a { color: #fff; }
 }
 
-// Centred containers, same names and same geometry as the framework-agnostic
-// build, so a page ported between the two flavours doesn't shift. Bootstrap's
-// own .container-* stay available and share the gutter via $container-padding-x;
-// these add the two widths Bootstrap has no breakpoint for.
+// Same names and geometry as the vanilla build, so ported pages don't shift.
+// Bootstrap's .container-* share the gutter via $container-padding-x; these
+// add the two widths it has no breakpoint for.
 .cam-container {
   width: min($cam-width-text, calc(100% - 2 * $cam-gutter));
   margin-inline: auto;
@@ -297,7 +288,7 @@
   margin-inline: auto;
 }
 
-// Long-form content. Apply to a wrapping element; it styles its own children.
+// Long-form content. Apply to a wrapper; it styles its children.
 
 .cam-prose {
   max-width: $cam-width-text;
@@ -315,8 +306,8 @@
   blockquote {
     margin: 1.4em 0;
     padding: 0.2em 0 0.2em 1.1em;
-    border-left: 3px solid $cam-teal;
-    color: $cam-muted;
+    border-left: 3px solid themed(accent, $cam-accent);
+    color: themed(muted, $cam-muted);
     font-style: italic;
   }
 
@@ -325,17 +316,116 @@
   figcaption {
     margin-top: 0.5em;
     font-size: 0.85rem;
-    color: $cam-muted;
+    color: themed(muted, $cam-muted);
   }
 
   img, video { border-radius: $cam-radius-md; }
 }
 
-// Bootstrap's .badge.bg-primary etc. already work (primary = ink). These add
-// the categorical palette for data that needs colour to carry meaning — a
-// status, a tag. Each is a WCAG-AA-safe shade; see README.md before adding
-// another.
+// Categorical badges for data where colour carries meaning (a status, a
+// tag). Each shade clears AA with white text; see README.md before adding one.
+// Unchanged in dark mode: white on these holds on any surface.
 .badge-cam-info    { background-color: #005a9e !important; } // Science Blue, darkened
 .badge-cam-success { background-color: #3e7a14 !important; } // Vida Loca, darkened
 .badge-cam-warning { background-color: #b4521a !important; } // Tango, darkened
 .badge-cam-accent  { background-color: #8f2bbc !important; } // Purple Heart, AA as-is
+
+// Theme toggle: one icon button, wired by js/cambridge-theme.js (which
+// un-hides it). Markup in README.md.
+.cam-theme-toggle {
+  appearance: none;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  // Pulled out of the row so the hit area doesn't make the header taller.
+  margin-block: -0.4rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: $cam-radius-pill;
+  color: themed(ink, $cam-ink);
+
+  &:hover { background: themed(fill, $cam-fill); }
+
+  &:focus-visible {
+    outline: 2px solid themed(focus, $cam-focus);
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+// One element per mode, for what a colour token can't recolour (a logo).
+// display:none, so the hidden one is also out of the accessibility tree.
+:root:not([data-bs-theme="dark"]) .cam-only-dark,
+:root[data-bs-theme="dark"] .cam-only-light { display: none; }
+
+// Dark mode for Bootstrap's own components. Its dark variables are set in
+// _tokens.scss; what's left is what compiles in a light colour or has no
+// dark variable. --cam-ink is the text colour and goes pale in dark, so
+// "primary" (= ink) flips with it: a pale button with dark text.
+[data-bs-theme="dark"] {
+  --#{$prefix}primary: #{$cam-ink-dark};
+  --#{$prefix}primary-rgb: #{to-rgb($cam-ink-dark)};
+  --#{$prefix}secondary: #{$cam-muted-dark};
+  --#{$prefix}secondary-rgb: #{to-rgb($cam-muted-dark)};
+  --#{$prefix}info: #{$cam-accent-ink-dark};
+  --#{$prefix}info-rgb: #{to-rgb($cam-accent-ink-dark)};
+  --#{$prefix}focus-ring-color: #{rgba($cam-focus-dark, 0.35)};
+
+  .btn-primary {
+    @include button-variant(
+      $cam-ink-dark, $cam-ink-dark,
+      $color: $cam-on-ink-dark,
+      $hover-background: $cam-ink-deep-dark, $hover-border: $cam-ink-deep-dark, $hover-color: $cam-on-ink-dark,
+      $active-background: $cam-ink-deep-dark, $active-border: $cam-ink-deep-dark, $active-color: $cam-on-ink-dark,
+      $disabled-color: $cam-on-ink-dark
+    );
+  }
+
+  .btn-secondary {
+    @include button-variant(
+      $cam-muted-dark, $cam-muted-dark,
+      $color: $cam-on-ink-dark,
+      $hover-background: $cam-ink-dark, $hover-border: $cam-ink-dark, $hover-color: $cam-on-ink-dark,
+      $active-background: $cam-ink-dark, $active-border: $cam-ink-dark, $active-color: $cam-on-ink-dark,
+      $disabled-color: $cam-on-ink-dark
+    );
+  }
+
+  .btn-outline-primary { @include button-outline-variant($cam-ink-dark, $color-hover: $cam-on-ink-dark); }
+  .btn-outline-secondary { @include button-outline-variant($cam-muted-dark, $color-hover: $cam-on-ink-dark); }
+
+  // Form focus rings compile in navy.
+  .form-control:focus,
+  .form-select:focus,
+  .form-check-input:focus {
+    border-color: $cam-muted-dark;
+    box-shadow: 0 0 0 $focus-ring-width rgba($cam-focus-dark, 0.35);
+  }
+
+  // The checked state is --primary, so pale; its tick needs to be dark.
+  .form-check-input:checked {
+    background-color: $cam-ink-dark;
+    border-color: $cam-ink-dark;
+
+    &[type="checkbox"] {
+      --#{$prefix}form-check-bg-image: #{escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{$cam-on-ink-dark}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/></svg>"))};
+    }
+
+    &[type="radio"] {
+      --#{$prefix}form-check-bg-image: #{escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='#{$cam-on-ink-dark}'/></svg>"))};
+    }
+  }
+}

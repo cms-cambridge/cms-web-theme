@@ -1,0 +1,57 @@
+// GENERATED FILE — do not edit. Source: tokens/tokens.json (`npm run build:tokens`).
+
+:root {
+  --cam-ink: #133844;
+  --cam-ink-deep: #0c262e;
+  --cam-on-ink: #ffffff;
+  --cam-muted: #526b77;
+  --cam-bg: #f7f8f9;
+  --cam-surface: #ffffff;
+  --cam-line: #dfe4e7;
+  --cam-line-strong: #bcc7cc;
+  --cam-fill: #eef1f3;
+  --cam-accent: #72adde;
+  --cam-accent-ink: #215a8c;
+  --cam-deep: #133844;
+  --cam-danger: #d6083b;
+  --cam-focus: #133844;
+  --cam-overlay: rgba(19, 56, 68, 0.24);
+  --cam-overlay-blur: 6px;
+  --cam-shadow-modal: 0 22px 54px rgba(12, 38, 46, 0.24), 0 2px 6px rgba(12, 38, 46, 0.1);
+  --cam-chart-anon: #0072cf;
+  --cam-chart-github: #ea7125;
+  --cam-chart-compute: #8f2bbc;
+  --cam-chart-empty: #dbe3e7;
+  --cam-font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --cam-font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --cam-gutter: 1.5rem;
+  --cam-width-page: 76rem;
+  --cam-width-wide: 60rem;
+  --cam-width-text: 40rem;
+  --cam-radius-sm: 3px;
+  --cam-radius-md: 4px;
+  --cam-radius-pill: 999px;
+  --cam-teal: var(--cam-accent); /* deprecated */
+  --cam-teal-ink: var(--cam-accent-ink); /* deprecated */
+}
+
+[data-bs-theme="dark"] {
+  --cam-ink: #e6eef1;
+  --cam-ink-deep: #ffffff;
+  --cam-on-ink: #0b1a1f;
+  --cam-muted: #9fb4be;
+  --cam-bg: #0b1a1f;
+  --cam-surface: #112830;
+  --cam-line: #2a4753;
+  --cam-line-strong: #55737f;
+  --cam-fill: #183440;
+  --cam-accent-ink: #9cc7ea;
+  --cam-deep: #1a4656;
+  --cam-focus: #e6eef1;
+  --cam-overlay: rgba(3, 12, 15, 0.55);
+  --cam-shadow-modal: 0 22px 54px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+  --cam-chart-anon: #4aa3ef;
+  --cam-chart-github: #f08a4b;
+  --cam-chart-compute: #b86fdc;
+  --cam-chart-empty: #2b4854;
+}

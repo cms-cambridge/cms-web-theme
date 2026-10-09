@@ -10,9 +10,12 @@
   <!-- dist/cambridge-theme.css is a full Bootstrap 5 build with our variables
        baked in — link it INSTEAD of bootstrap.css, not alongside it. -->
   <link rel="stylesheet" href="../dist/cambridge-theme.css">
+  <!-- Optional light/dark toggle. In <head>, not deferred, so a saved choice
+       applies before first paint. It sets Bootstrap's data-bs-theme. -->
+  <script src="../js/cambridge-theme.js"></script>
 </head>
 <body>
-  <header class="navbar navbar-expand navbar-cambridge bg-white">
+  <header class="navbar navbar-expand navbar-cambridge">
     <div class="container-lg">
       <a class="navbar-brand cam-brand" href="#">your-service</a>
       <ul class="navbar-nav me-auto">
@@ -21,14 +24,17 @@
         <li class="nav-item"><a class="nav-link" href="#">Docs</a></li>
       </ul>
       <a class="nav-link" href="#">Sign in</a>
+      <button type="button" class="cam-theme-toggle ms-2" data-cam-theme-toggle aria-label="Dark mode" aria-pressed="false" hidden>
+        <svg class="cam-only-light" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M13.4 9.3A5.7 5.7 0 0 1 6.7 2.6a5.7 5.7 0 1 0 6.7 6.7z"/></svg>
+        <svg class="cam-only-dark" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="2.6"/><path d="M8 1.6v1.5M8 12.9v1.5M1.6 8h1.5M12.9 8h1.5M3.5 3.5l1.05 1.05M11.45 11.45l1.05 1.05M3.5 12.5l1.05-1.05M11.45 4.55l1.05-1.05"/></svg>
+      </button>
     </div>
   </header>
 
   <main class="cam-container py-4">
     <h1><em class="cam-brand">your-service</em></h1>
     <p class="lead text-secondary">
-      A one-line description of what this tool does, in the same voice as
-      the upload page it's modelled on.
+      One line on what this tool does.
     </p>
 
     <div class="alert alert-cambridge mt-3" role="status">
