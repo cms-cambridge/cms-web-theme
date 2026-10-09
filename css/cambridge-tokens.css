@@ -6,20 +6,31 @@
  * Two headers ship: .cam-header (one row — an app/tool's nav chrome) and
  * .cam-masthead + .cam-hero (identity band, then title band — a content
  * or marketing page). Pick one per page. See README.md / style-guide.html.
+ *
+ * Dark mode: follows the OS (prefers-color-scheme) by default, and
+ * <html data-theme="light|dark"> overrides it either way. js/cambridge-theme.js
+ * is the optional toggle that sets that attribute; without it the OS alone
+ * decides and nothing breaks.
  */
 
 :root {
+  /* Tells the browser the page is light, so its own UI (form controls,
+     scrollbars, the <dialog> UA stylesheet) matches. The dark blocks
+     below flip it. */
+  color-scheme: light;
   /* --- GENERATED TOKENS: start (see tokens/tokens.json) --- */
   --cam-ink: #133844;
   --cam-ink-deep: #0c262e;
+  --cam-on-ink: #ffffff;
   --cam-muted: #526b77;
   --cam-bg: #f7f8f9;
   --cam-surface: #ffffff;
   --cam-line: #dfe4e7;
   --cam-line-strong: #bcc7cc;
   --cam-fill: #eef1f3;
-  --cam-teal: #00bdb6;
-  --cam-teal-ink: #00666b;
+  --cam-accent: #72adde;
+  --cam-accent-ink: #215a8c;
+  --cam-deep: #133844;
   --cam-danger: #d6083b;
   --cam-focus: #133844;
   --cam-overlay: rgba(19, 56, 68, 0.24);
@@ -38,8 +49,61 @@
   --cam-radius-sm: 3px;
   --cam-radius-md: 4px;
   --cam-radius-pill: 999px;
+  /* Deprecated names — see "aliases" in tokens.json. var() so they follow dark mode. */
+  --cam-teal: var(--cam-accent);
+  --cam-teal-ink: var(--cam-accent-ink);
   /* --- GENERATED TOKENS: end --- */
 }
+
+/* Dark values — only for tokens that have a "dark" entry in tokens.json.
+   Declared twice on purpose; see scripts/build-tokens.js for why. */
+/* --- GENERATED DARK TOKENS: start (see tokens/tokens.json) --- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --cam-ink: #e6eef1;
+    --cam-ink-deep: #ffffff;
+    --cam-on-ink: #0b1a1f;
+    --cam-muted: #9fb4be;
+    --cam-bg: #0b1a1f;
+    --cam-surface: #112830;
+    --cam-line: #2a4753;
+    --cam-line-strong: #55737f;
+    --cam-fill: #183440;
+    --cam-accent-ink: #9cc7ea;
+    --cam-deep: #1a4656;
+    --cam-focus: #e6eef1;
+    --cam-overlay: rgba(3, 12, 15, 0.55);
+    --cam-shadow-modal: 0 22px 54px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+    --cam-chart-anon: #4aa3ef;
+    --cam-chart-github: #f08a4b;
+    --cam-chart-compute: #b86fdc;
+    --cam-chart-empty: #2b4854;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --cam-ink: #e6eef1;
+  --cam-ink-deep: #ffffff;
+  --cam-on-ink: #0b1a1f;
+  --cam-muted: #9fb4be;
+  --cam-bg: #0b1a1f;
+  --cam-surface: #112830;
+  --cam-line: #2a4753;
+  --cam-line-strong: #55737f;
+  --cam-fill: #183440;
+  --cam-accent-ink: #9cc7ea;
+  --cam-deep: #1a4656;
+  --cam-focus: #e6eef1;
+  --cam-overlay: rgba(3, 12, 15, 0.55);
+  --cam-shadow-modal: 0 22px 54px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+  --cam-chart-anon: #4aa3ef;
+  --cam-chart-github: #f08a4b;
+  --cam-chart-compute: #b86fdc;
+  --cam-chart-empty: #2b4854;
+}
+/* --- GENERATED DARK TOKENS: end --- */
 
 /* ---------------------------------------------------------------------
    Base
@@ -102,7 +166,7 @@ a {
   text-underline-offset: 0.18em;
 }
 
-a:hover { color: var(--cam-teal-ink); }
+a:hover { color: var(--cam-accent-ink); }
 
 /* An italic serif wordmark — for your own product/site name, not
    general emphasis. */
@@ -120,7 +184,7 @@ a:hover { color: var(--cam-teal-ink); }
 
 .cam-header {
   background: var(--cam-surface);
-  border-bottom: 3px solid var(--cam-teal);
+  border-bottom: 3px solid var(--cam-accent);
 }
 
 .cam-header-inner {
@@ -167,8 +231,8 @@ a:hover { color: var(--cam-teal-ink); }
 }
 
 .cam-nav-link:hover {
-  color: var(--cam-teal-ink);
-  border-bottom-color: var(--cam-teal);
+  color: var(--cam-accent-ink);
+  border-bottom-color: var(--cam-accent);
 }
 
 .cam-nav-link.is-current {
@@ -196,6 +260,8 @@ a:hover { color: var(--cam-teal-ink); }
   gap: 0.9rem;
 }
 
+.cam-masthead-inner .cam-theme-toggle { margin-left: auto; }
+
 .cam-masthead-id {
   font-family: var(--cam-font-serif);
   font-size: 1.25rem;
@@ -204,7 +270,7 @@ a:hover { color: var(--cam-teal-ink); }
   color: var(--cam-ink);
   text-decoration: none;
   padding-bottom: 0.22rem;
-  border-bottom: 3px solid var(--cam-teal);
+  border-bottom: 3px solid var(--cam-accent);
 }
 
 .cam-masthead-id:hover { color: var(--cam-ink); }
@@ -241,9 +307,11 @@ a:hover { color: var(--cam-teal-ink); }
 
 /* Deep variant: Pantone 547 full-bleed, as the Cavendish's own homepage
    uses it. Once per site, on the homepage — every page doing it reads
-   as decoration. */
+   as decoration. Its own --cam-deep fill rather than --cam-ink, because
+   ink is the text colour and flips to a pale tint in dark mode; the white
+   text stays white in both. */
 .cam-hero-deep {
-  background: var(--cam-ink);
+  background: var(--cam-deep);
   color: #fff;
 }
 
@@ -264,14 +332,14 @@ a:hover { color: var(--cam-teal-ink); }
   font-weight: 600;
   text-decoration: none;
   background: var(--cam-ink);
-  color: #fff;
+  color: var(--cam-on-ink);
   border: 0;
   border-radius: var(--cam-radius-pill);
   padding: 0.62rem 1.5rem;
   cursor: pointer;
 }
 
-.cam-btn:hover { background: var(--cam-ink-deep); color: #fff; }
+.cam-btn:hover { background: var(--cam-ink-deep); color: var(--cam-on-ink); }
 .cam-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .cam-btn-outline {
@@ -287,6 +355,61 @@ a:hover { color: var(--cam-teal-ink); }
 }
 
 /* ---------------------------------------------------------------------
+   Theme toggle — one icon button that flips light/dark. Needs
+   js/cambridge-theme.js: the script wires it up, keeps aria-pressed true
+   while the page is dark, and remembers the choice. The button ships
+   `hidden` and the script un-hides it, so a visitor without JS never sees
+   a control that does nothing. The icon shows where a click goes next
+   (moon on a light page, sun on a dark one), via .cam-only-light/-dark.
+
+     <button type="button" class="cam-theme-toggle" data-cam-theme-toggle
+             aria-label="Dark mode" aria-pressed="false" hidden>
+       <svg class="cam-only-light" viewBox="0 0 16 16" aria-hidden="true" focusable="false">…moon…</svg>
+       <svg class="cam-only-dark" viewBox="0 0 16 16" aria-hidden="true" focusable="false">…sun…</svg>
+     </button>
+
+   The constant label with aria-pressed is deliberate: a label that
+   changes ("Switch to light") *and* a pressed state would be announced
+   twice over.
+   ------------------------------------------------------------------- */
+
+.cam-theme-toggle {
+  appearance: none;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  /* Pulled back out of the row so the toggle's hit area doesn't make
+     .cam-header taller than a header without one — same trick as
+     .cam-modal-close. */
+  margin-block: -0.4rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--cam-radius-pill);
+  color: var(--cam-ink);
+}
+
+.cam-theme-toggle:hover { background: var(--cam-fill); }
+
+.cam-theme-toggle:focus-visible {
+  outline: 2px solid var(--cam-focus);
+  outline-offset: 2px;
+}
+
+.cam-theme-toggle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------------------------------------------------------------------
    Notices — a quiet inline banner. Neutral fill, one coloured edge —
    deliberately low-contrast for a status line, not a warning.
    ------------------------------------------------------------------- */
@@ -294,7 +417,7 @@ a:hover { color: var(--cam-teal-ink); }
 .cam-notice {
   padding: 0.6rem 0.85rem;
   background: var(--cam-fill);
-  border-left: 3px solid var(--cam-teal-ink);
+  border-left: 3px solid var(--cam-accent-ink);
   font-size: 0.88rem;
 }
 
@@ -378,11 +501,11 @@ a:hover { color: var(--cam-teal-ink); }
   padding: 2rem 2.25rem 1.75rem;
   background: var(--cam-surface);
   color: var(--cam-ink);
-  /* One teal edge, the same 3px rule .cam-header and .cam-masthead-id
+  /* One accent edge, the same 3px rule .cam-header and .cam-masthead-id
      carry — it's what marks the box as ours rather than as a generic
      modal, and it costs no colour anywhere else in the panel. */
   border: 1px solid var(--cam-line);
-  border-top: 3px solid var(--cam-teal);
+  border-top: 3px solid var(--cam-accent);
   border-radius: var(--cam-radius-md);
   box-shadow: var(--cam-shadow-modal);
 }
@@ -511,7 +634,7 @@ a:hover { color: var(--cam-teal-ink); }
   border-radius: var(--cam-radius-sm);
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--cam-teal-ink);
+  color: var(--cam-accent-ink);
 }
 
 .cam-modal-actions {
@@ -555,6 +678,18 @@ a:hover { color: var(--cam-teal-ink); }
   background-size: 11px 11px;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* The tick is a data-URI image, so its stroke colour is baked in and can't
+   follow --cam-on-ink: white on the navy fill above, dark on the pale one
+   dark mode gives it. Same two-way selector as the token blocks. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cam-modal-opt input[type="checkbox"]:checked {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%230b1a1f' stroke-width='2' d='M3.5 8.5 6.5 11.5 12.5 4.5'/></svg>");
+  }
+}
+:root[data-theme="dark"] .cam-modal-opt input[type="checkbox"]:checked {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%230b1a1f' stroke-width='2' d='M3.5 8.5 6.5 11.5 12.5 4.5'/></svg>");
 }
 
 .cam-modal-opt input[type="checkbox"]:focus-visible {
@@ -602,6 +737,13 @@ a:hover { color: var(--cam-teal-ink); }
   background-repeat: no-repeat;
   background-position: right 0.7rem center;
 }
+
+/* Baked-in stroke colour again (see the checkbox tick): the chevron needs
+   a pale twin in dark mode. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cam-select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path fill='none' stroke='%23e6eef1' stroke-width='1.4' d='M1 1.5 6 6.5 11 1.5'/></svg>"); }
+}
+:root[data-theme="dark"] .cam-select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path fill='none' stroke='%23e6eef1' stroke-width='1.4' d='M1 1.5 6 6.5 11 1.5'/></svg>"); }
 
 .cam-input:hover,
 .cam-select:hover { border-color: var(--cam-line-strong); }
@@ -665,6 +807,25 @@ a:hover { color: var(--cam-teal-ink); }
    ------------------------------------------------------------------- */
 
 .cam-muted { color: var(--cam-muted); }
+
+/* Show one thing per theme — for what a colour token can't recolour, most
+   often a logo with a black ink path (see assets/cms-mark-dark.svg). Put
+   .cam-only-light on the light version and .cam-only-dark on the other;
+   the one that doesn't apply is display:none, so it is also gone from the
+   accessibility tree and only one alt text is ever read. */
+:root[data-theme="light"] .cam-only-dark,
+:root[data-theme="dark"] .cam-only-light { display: none; }
+
+/* "Dark" and "light" mean here what they mean in the token blocks at the
+   top: an explicit data-theme wins, otherwise the OS decides. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cam-only-light { display: none; }
+}
+
+@media not (prefers-color-scheme: dark) {
+  :root:not([data-theme="dark"]) .cam-only-dark { display: none; }
+}
+
 .cam-container {
   width: min(var(--cam-width-text), calc(100% - 2 * var(--cam-gutter)));
   margin-inline: auto;
@@ -707,7 +868,7 @@ a:hover { color: var(--cam-teal-ink); }
 .cam-prose blockquote {
   margin: 1.4em 0;
   padding: 0.2em 0 0.2em 1.1em;
-  border-left: 3px solid var(--cam-teal);
+  border-left: 3px solid var(--cam-accent);
   color: var(--cam-muted);
   font-style: italic;
 }
@@ -746,4 +907,4 @@ a:hover { color: var(--cam-teal-ink); }
 }
 
 .cam-footer a { color: var(--cam-muted); }
-.cam-footer a:hover { color: var(--cam-teal-ink); }
+.cam-footer a:hover { color: var(--cam-accent-ink); }

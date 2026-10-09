@@ -12,6 +12,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,560;8..60,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/cambridge-tokens.css">
 <link rel="stylesheet" href="../dist/cambridge-theme.css">
+<!-- In <head>, not deferred: applies a saved light/dark choice before first paint. -->
+<script src="../js/cambridge-theme.js"></script>
 <style>
   /* Doc-page-only styling, not part of the shipped theme. */
   /* Same container formula as the theme's own (see cambridge-tokens.css). */
@@ -30,15 +32,28 @@
   .swatch-meta { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
   .swatch-meta code { display: block; margin: 0.15rem 0; }
   .swatch-ratio { font-size: 0.78rem; color: var(--cam-muted); }
-  .swatch-ratio.pass::before { content: "✓ AA "; color: #3e7a14; }
+  /* light-dark() because this is a doc-only page and it is the least code
+     for a colour that has to follow the theme; the shipped CSS avoids it
+     (it needs a 2024 browser) and declares its dark values explicitly. */
+  .swatch-ratio.pass::before { content: "✓ AA "; color: light-dark(#3e7a14, #86c855); }
   .swatch-ratio.fail::before { content: "✕ fails AA "; color: var(--cam-danger); }
   .demo-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin: 0.75rem 0; }
   .demo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1rem 0; }
   .demo-pair > div { min-width: 0; }
   .demo-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cam-muted); margin: 0 0 0.5rem; }
   .dont { border-left: 3px solid var(--cam-danger); padding: 0.1rem 0 0.1rem 1rem; margin: 0.75rem 0; }
-  .do { border-left: 3px solid #3e7a14; padding: 0.1rem 0 0.1rem 1rem; margin: 0.75rem 0; }
-  pre.code { background: #10262d; color: #eef5f6; padding: 0.9rem 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.82rem; }
+  .do { border-left: 3px solid light-dark(#3e7a14, #86c855); padding: 0.1rem 0 0.1rem 1rem; margin: 0.75rem 0; }
+  pre.code { background: #10262d; color: #eef5f6; padding: 0.9rem 1rem; border: 1px solid var(--cam-line); border-radius: 6px; overflow-x: auto; font-size: 0.82rem; }
+  /* Bootstrap's stock dark palette is grey. Until the Bootstrap build is
+     branded for dark, bridge only the page-level variables so the doc page
+     itself isn't two-tone; the Bootstrap demos further down remain stock. */
+  [data-bs-theme="dark"] {
+    --bs-body-bg: var(--cam-bg);
+    --bs-body-color: var(--cam-ink);
+    --bs-emphasis-color: var(--cam-ink);
+    --bs-secondary-color: var(--cam-muted);
+    --bs-border-color: var(--cam-line);
+  }
   @media (max-width: 640px) { .demo-pair { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -47,13 +62,19 @@
 <header class="cam-header">
   <div class="cam-header-inner">
     <a class="doc-home" href="https://cms.mus.cam.ac.uk/">
-      <img src="../assets/cms-mark.svg" alt="Centre for Music and Science" class="doc-mark" width="47" height="22">
+      <img src="../assets/cms-mark.svg" alt="Centre for Music and Science" class="doc-mark cam-only-light" width="47" height="22">
+      <img src="../assets/cms-mark-dark.svg" alt="Centre for Music and Science" class="doc-mark cam-only-dark" width="47" height="22">
     </a>
     <a class="cam-brand-link" href="#top">cms-web-theme</a>
     <a class="cam-nav-link" href="https://github.com/cms-cambridge/cms-web-theme">GitHub</a>
     <a class="cam-nav-link" href="../examples/bootstrap-example.html">Bootstrap example</a>
     <a class="cam-nav-link" href="../examples/vanilla-example.html">Vanilla example</a>
     <a class="cam-nav-link" href="../examples/content-page.html">Content page example</a>
+    <span class="cam-nav-gap"></span>
+    <button type="button" class="cam-theme-toggle" data-cam-theme-toggle aria-label="Dark mode" aria-pressed="false" hidden>
+      <svg class="cam-only-light" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M13.4 9.3A5.7 5.7 0 0 1 6.7 2.6a5.7 5.7 0 1 0 6.7 6.7z"/></svg>
+      <svg class="cam-only-dark" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="2.6"/><path d="M8 1.6v1.5M8 12.9v1.5M1.6 8h1.5M12.9 8h1.5M3.5 3.5l1.05 1.05M11.45 11.45l1.05 1.05M3.5 12.5l1.05-1.05M11.45 4.55l1.05-1.05"/></svg>
+    </button>
   </div>
 </header>
 
@@ -119,10 +140,11 @@
   <h2>Colour</h2>
   <p class="doc-lede">
     Pantone 547 (<code>--cam-ink</code>) is the dominant colour — text,
-    headings, buttons, nav. Pantone 326 (<code>--cam-teal</code>) is the one
-    accent, used at low density: a header rule, an active underline, a
-    notice's edge. It is <strong>never</strong> a text or fill colour on its
-    own — both directions fail contrast (see table). This mirrors how
+    headings, buttons, nav. The light blue from the Centre's own logo
+    (<code>--cam-accent</code>) is the one accent, used at low density: a
+    header rule, an active underline, a notice's edge. On a light page it is
+    <strong>never</strong> a text or fill colour on its own — both
+    directions fail contrast (see table). This mirrors how
     phy.cam.ac.uk and mus.cam.ac.uk actually use colour: close to
     monochrome, not the six-colour brand palette applied broadly.
   </p>
@@ -145,14 +167,14 @@
       <span class="swatch-ratio pass">5.3:1 on --bg</span></div>
     </div>
     <div class="swatch">
-      <div class="swatch-color" style="background:#00bdb6"></div>
-      <div class="swatch-meta"><strong>Teal</strong> — Pantone 326, accent only<code>--cam-teal #00bdb6</code>
-      <span class="swatch-ratio fail">2.2:1 as text — rules/edges only</span></div>
+      <div class="swatch-color" style="background:#72adde"></div>
+      <div class="swatch-meta"><strong>Accent</strong> — the logo's light blue<code>--cam-accent #72adde</code>
+      <span class="swatch-ratio fail">2.3:1 as text on --bg — rules/edges only</span></div>
     </div>
     <div class="swatch">
-      <div class="swatch-color" style="background:#00666b"></div>
-      <div class="swatch-meta"><strong>Teal, darkened</strong> — for teal text<code>--cam-teal-ink #00666b</code>
-      <span class="swatch-ratio pass">6.3:1 on --bg</span></div>
+      <div class="swatch-color" style="background:#215a8c"></div>
+      <div class="swatch-meta"><strong>Accent, darkened</strong> — for accent text<code>--cam-accent-ink #215a8c</code>
+      <span class="swatch-ratio pass">6.8:1 on --bg</span></div>
     </div>
     <div class="swatch">
       <div class="swatch-color" style="background:#d6083b"></div>
@@ -226,6 +248,133 @@
     colour-blind readers to tell apart in a stacked chart; it uses Science
     Blue, Tango and Purple Heart instead.
   </p>
+</div>
+
+<div class="doc-section" id="dark-mode">
+  <h2>Dark mode <span class="cam-muted" style="font-size:0.9rem; font-weight:400; font-family:var(--cam-font-sans);">— prototype</span></h2>
+  <p class="doc-lede">
+    Try the toggle in the header. The framework-agnostic build
+    (<code>css/cambridge-tokens.css</code>) follows the OS's dark-mode
+    setting on its own; the toggle overrides it either way and remembers
+    the choice. Everything flips by re-declaring tokens, so no component
+    rule needs to know which mode it is in — with three exceptions noted
+    below.
+  </p>
+  <p class="doc-lede">
+    The Pantone 547 navy stays the character of the dark theme, but it
+    moves from <em>text</em> to <em>surface</em>: <code>--cam-ink</code>
+    names "the text and primary-control colour", so it becomes a pale tint,
+    and the surfaces take the navy family instead. The logo's light blue
+    needs no change at all — it already clears 6:1 on these surfaces.
+  </p>
+
+  <h3>Dark palette</h3>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0b1a1f"></div>
+      <div class="swatch-meta"><strong>Page background</strong><code>--cam-bg #0b1a1f</code></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#112830"></div>
+      <div class="swatch-meta"><strong>Surface</strong> — cards, header<code>--cam-surface #112830</code></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#183440"></div>
+      <div class="swatch-meta"><strong>Fill</strong> — inputs, chips<code>--cam-fill #183440</code></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#e6eef1"></div>
+      <div class="swatch-meta"><strong>Ink</strong> — now the text colour<code>--cam-ink #e6eef1</code>
+      <span class="swatch-ratio pass">15.1:1 on --bg, 13.0:1 on --surface</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#9fb4be"></div>
+      <div class="swatch-meta"><strong>Muted text</strong><code>--cam-muted #9fb4be</code>
+      <span class="swatch-ratio pass">8.3:1 on --bg, 7.1:1 on --surface</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#72adde"></div>
+      <div class="swatch-meta"><strong>Accent</strong> — unchanged<code>--cam-accent #72adde</code>
+      <span class="swatch-ratio pass">7.4:1 on --bg — still kept to rules/edges</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#9cc7ea"></div>
+      <div class="swatch-meta"><strong>Accent, for text</strong><code>--cam-accent-ink #9cc7ea</code>
+      <span class="swatch-ratio pass">8.6:1 on --surface</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1a4656"></div>
+      <div class="swatch-meta"><strong>Deep band</strong> — <code>.cam-hero-deep</code><code>--cam-deep #1a4656</code>
+      <span class="swatch-ratio pass">10.2:1 white text on it</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#55737f"></div>
+      <div class="swatch-meta"><strong>Strong border</strong><code>--cam-line-strong #55737f</code>
+      <span class="swatch-ratio pass">3.0:1 on --surface (non-text)</span></div>
+    </div>
+  </div>
+  <p class="doc-lede">
+    Ratios computed from the hex pairs, as in the light palette above. The
+    hairline <code>--cam-line</code> (<code>#2a4753</code>) is decoration,
+    not a control boundary, and is deliberately quiet.
+  </p>
+
+  <h3>The three places a token flip isn't enough</h3>
+  <ul class="doc-lede">
+    <li>
+      <strong>The primary button inverts.</strong> A navy pill with white
+      text would vanish into a navy surface, so it becomes a pale pill with
+      dark text — same shape, same weight. That is why there is a
+      <code>--cam-on-ink</code> token now, instead of a hard-coded
+      <code>#fff</code>.
+    </li>
+    <li>
+      <strong>The deep hero band keeps its navy.</strong>
+      <code>.cam-hero-deep</code> used to be filled with
+      <code>--cam-ink</code>; ink is now pale, so the band has its own
+      <code>--cam-deep</code> token, with white text in both modes.
+    </li>
+    <li>
+      <strong>Images can't read tokens.</strong> The select's chevron and
+      the checkbox's tick are data-URI icons with a baked-in stroke, so each
+      has a dark twin rule; the logo's black path needs
+      <code>assets/cms-mark-dark.svg</code>. Show one per mode with
+      <code>.cam-only-light</code> / <code>.cam-only-dark</code>.
+    </li>
+  </ul>
+  <p class="doc-lede">
+    Unchanged on purpose: the categorical badges (white text on a darkened
+    brand colour holds contrast on any surface) and
+    <code>--cam-danger</code> (a badge fill that must keep holding white
+    text, so it can't be lightened for dark surfaces — it reads as a
+    3px edge at 2.9:1, just under the 3:1 non-text bar).
+  </p>
+
+  <h3>Adding the toggle</h3>
+<pre class="code">&lt;!-- in &lt;head&gt;, not deferred: applies a saved choice before first paint --&gt;
+&lt;script src="cms-web-theme/js/cambridge-theme.js"&gt;&lt;/script&gt;
+
+&lt;button type="button" class="cam-theme-toggle" data-cam-theme-toggle
+        aria-label="Dark mode" aria-pressed="false" hidden&gt;
+  &lt;svg class="cam-only-light" viewBox="0 0 16 16" aria-hidden="true" focusable="false"&gt;&lt;path d="M13.4 9.3A5.7 5.7 0 0 1 6.7 2.6a5.7 5.7 0 1 0 6.7 6.7z"/&gt;&lt;/svg&gt;
+  &lt;svg class="cam-only-dark" viewBox="0 0 16 16" aria-hidden="true" focusable="false"&gt;&lt;circle cx="8" cy="8" r="2.6"/&gt;&lt;path d="M8 1.6v1.5M8 12.9v1.5M1.6 8h1.5M12.9 8h1.5M3.5 3.5l1.05 1.05M11.45 11.45l1.05 1.05M3.5 12.5l1.05-1.05M11.45 4.55l1.05-1.05"/&gt;&lt;/svg&gt;
+&lt;/button&gt;</pre>
+  <p class="doc-lede">
+    The button ships <code>hidden</code> and the script reveals it, so a
+    visitor without JavaScript never sees a control that does nothing — they
+    just get the OS setting. With no saved choice the page follows the OS,
+    including if it changes while the page is open. The script sets
+    <code>&lt;html data-theme="light|dark"&gt;</code>, which is all the CSS
+    looks at; a consumer who wants their own toggle can set that attribute
+    themselves.
+  </p>
+  <div class="cam-notice" role="note">
+    <strong>Not yet branded for the Bootstrap build.</strong> The script also
+    sets Bootstrap 5.3's own <code>data-bs-theme</code>, so a Bootstrap page
+    gets Bootstrap's stock grey dark palette rather than a light/dark mix —
+    which is what the "Bootstrap" columns below show in dark mode. Giving
+    <code>dist/cambridge-theme.css</code> the palette above is the next step.
+  </div>
 </div>
 
 <div class="doc-section">
@@ -526,8 +675,9 @@ el.showModal();   // not el.show() — that opens it with no backdrop,
 </div>
 
 <script>
-  // Doc-page-only: drives the modal demo above. The theme itself ships no
-  // JavaScript — .cam-modal is CSS over the browser's own <dialog>.
+  // Doc-page-only: drives the modal demo above. .cam-modal is CSS over the
+  // browser's own <dialog>; the theme's one script is the optional light/dark
+  // toggle, js/cambridge-theme.js, loaded in <head>.
   (function () {
     var dialog = document.getElementById('modal-demo');
     if (!dialog || typeof dialog.showModal !== 'function') return;

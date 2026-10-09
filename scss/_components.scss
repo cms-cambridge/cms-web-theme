@@ -3,6 +3,20 @@
 // the palette via _tokens.scss — this file covers what Bootstrap has no
 // variable for.
 
+// The components below that also exist in the framework-agnostic build
+// (.cam-modal*, .cam-masthead*, .cam-hero*, .cam-prose) take their colours
+// from the --cam-* custom property when the page defines one, and fall back
+// to the value compiled in here when it doesn't. A Bootstrap-only page
+// therefore renders exactly as before; a page that also links
+// css/cambridge-tokens.css — as docs/style-guide.html does, to show both
+// flavours side by side — gets that file's dark mode in these components
+// instead of a second, light-only copy of them overriding it.
+// Bootstrap's own components (.btn, .card, .alert…) are not part of this:
+// their colours are compiled in, and the Bootstrap build has no dark mode yet.
+@function themed($name, $fallback) {
+  @return var(--cam-#{$name}, #{$fallback});
+}
+
 // Italic serif wordmark — for your own product/site name, not general
 // emphasis.
 .cam-brand {
@@ -13,15 +27,15 @@
 
 // The header accent rule + underline nav. Add alongside Bootstrap's .navbar.
 .navbar-cambridge {
-  border-bottom: 3px solid $cam-teal;
+  border-bottom: 3px solid $cam-accent;
 
   .nav-link {
     border-bottom: 2px solid transparent;
     border-radius: 0;
 
     &:hover {
-      color: $cam-teal-ink;
-      border-bottom-color: $cam-teal;
+      color: $cam-accent-ink;
+      border-bottom-color: $cam-accent;
     }
 
     &.active {
@@ -37,7 +51,7 @@
 .alert-cambridge {
   background: $cam-fill;
   border: 0;
-  border-left: 3px solid $cam-teal-ink;
+  border-left: 3px solid $cam-accent-ink;
   border-radius: $cam-radius-md;
   color: $cam-ink;
 }
@@ -58,13 +72,13 @@
   overflow: auto;
   margin: auto;
   padding: 2rem 2.25rem 1.75rem;
-  background: $cam-surface;
-  color: $cam-ink;
-  // The same 3px teal rule .navbar-cambridge and .cam-masthead-id carry.
-  border: 1px solid $cam-line;
-  border-top: 3px solid $cam-teal;
+  background: themed(surface, $cam-surface);
+  color: themed(ink, $cam-ink);
+  // The same 3px accent rule .navbar-cambridge and .cam-masthead-id carry.
+  border: 1px solid themed(line, $cam-line);
+  border-top: 3px solid themed(accent, $cam-accent);
   border-radius: $cam-radius-md;
-  box-shadow: $cam-shadow-modal;
+  box-shadow: themed(shadow-modal, $cam-shadow-modal);
 
   // var(…, <literal>) on purpose: ::backdrop inherited from nothing at all
   // until 2023, so on an older engine the literal is what paints.
@@ -84,7 +98,7 @@
   display: grid;
   place-items: center;
   padding: 2rem 0;
-  background: $cam-overlay;
+  background: themed(overlay, $cam-overlay);
   backdrop-filter: blur($cam-overlay-blur);
   -webkit-backdrop-filter: blur($cam-overlay-blur);
 }
@@ -102,7 +116,7 @@
   margin: 0 0 0.4rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -117,7 +131,7 @@
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.015em;
-  color: $cam-ink;
+  color: themed(ink, $cam-ink);
 }
 
 // 2.75rem = the 44px pointer target, pulled back out of the padding by the
@@ -133,15 +147,15 @@
   background: none;
   border: 0;
   border-radius: $cam-radius-sm;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
 
   &:hover {
-    background: $cam-fill;
-    color: $cam-ink;
+    background: themed(fill, $cam-fill);
+    color: themed(ink, $cam-ink);
   }
 
   &:focus-visible {
-    outline: 2px solid $cam-focus;
+    outline: 2px solid themed(focus, $cam-focus);
     outline-offset: 2px;
   }
 
@@ -168,12 +182,12 @@
   align-items: flex-start;
   gap: 0.8rem;
   padding: 0.75rem 0;
-  border-top: 1px solid $cam-line;
+  border-top: 1px solid themed(line, $cam-line);
   font-size: 0.9rem;
   line-height: 1.5;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
 
-  &:last-child { border-bottom: 1px solid $cam-line; }
+  &:last-child { border-bottom: 1px solid themed(line, $cam-line); }
 }
 
 .cam-modal-step-mark {
@@ -183,11 +197,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $cam-fill;
+  background: themed(fill, $cam-fill);
   border-radius: $cam-radius-sm;
   font-size: 0.75rem;
   font-weight: 700;
-  color: $cam-teal-ink;
+  color: themed(accent-ink, $cam-accent-ink);
 }
 
 .cam-modal-actions {
@@ -206,7 +220,7 @@
   align-items: center;
   gap: 0.55rem;
   font-size: 0.84rem;
-  color: $cam-muted;
+  color: themed(muted, $cam-muted);
   cursor: pointer;
 
   .form-check-input { margin: 0; flex-shrink: 0; }
@@ -232,7 +246,7 @@
 // (+ .navbar-cambridge above) stays the header for an app or tool.
 
 .cam-masthead {
-  background: $cam-surface;
+  background: themed(surface, $cam-surface);
 }
 
 .cam-masthead-id {
@@ -240,24 +254,24 @@
   font-size: 1.25rem;
   font-style: italic;
   font-weight: 600;
-  color: $cam-ink;
+  color: themed(ink, $cam-ink);
   text-decoration: none;
   padding-bottom: 0.22rem;
-  border-bottom: 3px solid $cam-teal;
+  border-bottom: 3px solid themed(accent, $cam-accent);
 
-  &:hover { color: $cam-ink; }
+  &:hover { color: themed(ink, $cam-ink); }
 }
 
 .cam-masthead-unit {
   padding-left: 0.9rem;
-  border-left: 1px solid $cam-line-strong;
-  color: $cam-muted;
+  border-left: 1px solid themed(line-strong, $cam-line-strong);
+  color: themed(muted, $cam-muted);
   font-size: 0.92rem;
 }
 
 .cam-hero {
-  background: $cam-fill;
-  border-top: 1px solid $cam-line;
+  background: themed(fill, $cam-fill);
+  border-top: 1px solid themed(line, $cam-line);
   padding: 3.1rem 0 3.3rem;
 
   h1 {
@@ -269,13 +283,15 @@
     margin-top: 0.85rem;
     max-width: 38em;
     font-size: 1.02rem;
-    color: $cam-muted;
+    color: themed(muted, $cam-muted);
   }
 }
 
 // Deep variant: Pantone 547 full-bleed. Once per site, on the homepage.
+// --cam-deep, not --cam-ink, to match the framework-agnostic build, where ink
+// is the text colour and flips to a pale tint in dark mode.
 .cam-hero-deep {
-  background: $cam-ink;
+  background: themed(deep, $cam-deep);
   color: #fff;
 
   h1, p { color: #fff; }
@@ -315,8 +331,8 @@
   blockquote {
     margin: 1.4em 0;
     padding: 0.2em 0 0.2em 1.1em;
-    border-left: 3px solid $cam-teal;
-    color: $cam-muted;
+    border-left: 3px solid themed(accent, $cam-accent);
+    color: themed(muted, $cam-muted);
     font-style: italic;
   }
 
@@ -325,7 +341,7 @@
   figcaption {
     margin-top: 0.5em;
     font-size: 0.85rem;
-    color: $cam-muted;
+    color: themed(muted, $cam-muted);
   }
 
   img, video { border-radius: $cam-radius-md; }

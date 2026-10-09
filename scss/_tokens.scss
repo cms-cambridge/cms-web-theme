@@ -4,17 +4,22 @@
 // Bootstrap variable overrides. This file must be @imported BEFORE
 // "bootstrap/scss/bootstrap" — Bootstrap only picks up a variable if it
 // isn't already set (`!default`), so order matters.
+//
+// Light values only: the Bootstrap build has no dark mode yet, so the
+// "dark" values in tokens.json are emitted into the CSS build alone.
 
 $cam-ink: #133844;
 $cam-ink-deep: #0c262e;
+$cam-on-ink: #ffffff;
 $cam-muted: #526b77;
 $cam-bg: #f7f8f9;
 $cam-surface: #ffffff;
 $cam-line: #dfe4e7;
 $cam-line-strong: #bcc7cc;
 $cam-fill: #eef1f3;
-$cam-teal: #00bdb6;
-$cam-teal-ink: #00666b;
+$cam-accent: #72adde;
+$cam-accent-ink: #215a8c;
+$cam-deep: #133844;
 $cam-danger: #d6083b;
 $cam-focus: #133844;
 $cam-overlay: rgba(19, 56, 68, 0.24);
@@ -34,16 +39,20 @@ $cam-radius-sm: 3px;
 $cam-radius-md: 4px;
 $cam-radius-pill: 999px;
 
+// Deprecated names — see "aliases" in tokens.json.
+$cam-teal: $cam-accent;
+$cam-teal-ink: $cam-accent-ink;
+
 // Map onto the Bootstrap variables that drive its component styles.
 $body-color:              $cam-ink;
 $body-bg:                 $cam-bg;
 $primary:                 $cam-ink;
 $secondary:               $cam-muted;
 $danger:                  $cam-danger;
-$info:                    $cam-teal-ink;
+$info:                    $cam-accent-ink;
 $border-color:            $cam-line;
 $link-color:              $cam-ink;
-$link-hover-color:        $cam-teal-ink;
+$link-hover-color:        $cam-accent-ink;
 $font-family-sans-serif:  $cam-font-sans;
 $font-family-base:        $cam-font-sans;
 $headings-font-family:    $cam-font-serif;

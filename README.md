@@ -108,10 +108,13 @@ in your own CSS.
 ```
 tokens/tokens.json          single source of truth — colour, type, radii
 scripts/build-tokens.js     generates scss/_tokens.scss and the token
-                             block in css/cambridge-tokens.css from it
+                             blocks (light and dark) in
+                             css/cambridge-tokens.css from it
 scss/                       Bootstrap 5 build (source)
 css/cambridge-tokens.css    framework-agnostic build (hand-written, but
-                             its token block is generated — see above)
+                             its token blocks are generated — see above)
+js/cambridge-theme.js       the optional light/dark toggle — the theme's
+                             only script
 dist/                       precompiled Bootstrap build — commit this,
                              it's what most consumers actually link
 examples/                   one working page per flavour
@@ -136,17 +139,30 @@ That regenerates `scss/_tokens.scss` and the token block in
 not built on install, so consumers who just download the CSS get a working
 file without a Node toolchain.
 
-Don't hand-edit `scss/_tokens.scss` or the generated block inside
+Don't hand-edit `scss/_tokens.scss` or the generated blocks inside
 `css/cambridge-tokens.css` — the next `npm run build` overwrites them.
+
+A token with a `"dark"` value next to its `"value"` is re-declared for dark
+mode in the CSS build; one without keeps its light value in both. The
+top-level `"aliases"` map lists deprecated token names (`--cam-teal`,
+`--cam-teal-ink`) that now point at their replacements — delete an entry
+once nothing uses it.
 
 ## Colour, briefly
 
 Pantone 547 (`--cam-ink`, `#133844`) is the dominant colour — text,
-headings, buttons, nav — not a bright blue. Pantone 326 (`--cam-teal`,
-`#00bdb6`) is the *one* accent, used thin: a header rule, an active
-underline, a notice's edge. It's never a text or fill colour by itself —
-it fails WCAG AA contrast both directions (2.2:1 as text, 2.35:1 white on
-it). This is a deliberate departure from applying the brand's full primary
+headings, buttons, nav — not a bright blue. The light blue from the
+Centre's own logo (`--cam-accent`, `#72adde`, sampled from
+`assets/cms-mark.svg`) is the *one* accent, used thin: a header rule, an
+active underline, a notice's edge. On a light page it's never a text or
+fill colour by itself — it fails WCAG AA contrast both directions (2.3:1 as
+text on `--cam-bg`, 2.4:1 white on it). Where accent-coloured text has to
+be read, `--cam-accent-ink` (`#215a8c`, 6.8:1) is the darkened shade.
+
+The accent was Pantone 326 teal (`--cam-teal`, `#00bdb6`) until it moved to
+the logo blue. `--cam-teal` and `--cam-teal-ink` (and `$cam-teal*` in Sass)
+still work as deprecated aliases, so a site that hasn't been updated keeps
+an accent — now the blue — rather than silently losing it. This is a deliberate departure from applying the brand's full primary
 palette broadly: it's how the two Cambridge departmental sites this was
 checked against actually use colour, not how the brand guidelines' colour
 chips might suggest doing it in isolation.
@@ -157,6 +173,57 @@ badges, chart series — the one place colour needs to carry meaning rather
 than accent the page. Three of the six are too light for white text at AA;
 darkened companion shades ship for those. Full numbers, and which shades to
 use where, are in `docs/style-guide.html`.
+
+## Dark mode
+
+*Prototype — framework-agnostic build only.* `css/cambridge-tokens.css`
+follows the OS's dark-mode setting with no JavaScript at all. To let people
+override it, add the toggle:
+
+```html
+<!-- in <head>, not deferred: applies a saved choice before first paint -->
+<script src="node_modules/cms-web-theme/js/cambridge-theme.js"></script>
+
+<!-- anywhere in your header; the script un-hides it -->
+<button type="button" class="cam-theme-toggle" data-cam-theme-toggle
+        aria-label="Dark mode" aria-pressed="false" hidden>
+  <svg class="cam-only-light" …moon… /> <svg class="cam-only-dark" …sun… />
+</button>
+```
+
+The full icon markup is in `docs/style-guide.html` and the two example
+pages. A click sets `<html data-theme="light|dark">` and saves it to
+`localStorage`; with no saved choice the page follows the OS, including if
+it changes while the page is open. `data-theme` is all the CSS looks at, so
+a toggle of your own can just set that attribute. The script also fires a
+`cam-theme-change` event on `document` (`detail.theme`) for anything that
+needs to redraw, such as a canvas chart.
+
+How it works: every token that matters has a `"dark"` value in
+`tokens/tokens.json`, and the build re-declares those under
+`@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) … }`
+and `:root[data-theme="dark"]`, so no component rule needs to know which
+mode it is in. `--cam-ink` is the *text* colour and so flips to a pale
+tint; the navy moves to the surfaces. Three things a token flip can't
+cover, handled explicitly:
+
+- **The primary button inverts** (pale pill, dark text) — hence the new
+  `--cam-on-ink` token in place of a hard-coded white.
+- **`.cam-hero-deep` keeps a navy fill** via its own `--cam-deep` token.
+- **Baked-in colours** — the select's chevron, the checkbox's tick, the
+  logo's black path — get dark twins. Use `.cam-only-light` /
+  `.cam-only-dark` to show one element per mode (`assets/cms-mark-dark.svg`
+  is the white-ink logo).
+
+Overriding a token yourself? Do it under both dark selectors too, or the
+dark block (more specific than a plain `:root`) will win in dark mode.
+
+**Bootstrap build:** not branded for dark yet. The script also sets
+Bootstrap 5.3's `data-bs-theme`, which gives a Bootstrap page Bootstrap's
+stock grey dark palette; the theme's own additions there (`.cam-modal`,
+`.cam-masthead`, `.cam-hero`, `.cam-prose`) read `--cam-*` when the page
+defines it and fall back to compiled light values otherwise, so a
+Bootstrap-only page is unchanged.
 
 ## Layout and margins
 
